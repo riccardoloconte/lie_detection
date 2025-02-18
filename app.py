@@ -175,14 +175,14 @@ def consent_page():
     st.write("""Please click on "Accept" if you want to give your consent and proceed with the experiment.
               Otherwise, click  on "Deny" and the experiment ends.""")
     
-    col1, col2 = st.columns([1,0.1])
+    col1, col2, col3 = st.columns([1,6,1])
     with col1:
         if st.button("Accept"):
             st.session_state.consent_data = "Accepted"
             update_progress()
             st.session_state.page = 'instructions'
             st.rerun()
-    with col2:
+    with col3:
         if st.button("Deny"):
             st.session_state.consent_data = "Denied"
             update_progress()
