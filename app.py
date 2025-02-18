@@ -201,7 +201,7 @@ def instructions_page():
                 This algorithm shows better performance in distinguishing truth from lies than the average human.""")
     st.write("You'll see an example on the next pages.")
     
-    st.write("**Please note that you should read the statements carefully, as after the task you will also have to take a quick quiz. If you don't pass, you can't receive your cash reward.**")
+    st.write("**Please note that you should read the statements carefully, as after the task you will also have to take a quick quiz. The quiz serves to validate your participation.**")
 
     if st.button("Next"):
         update_progress()
