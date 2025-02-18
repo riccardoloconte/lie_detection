@@ -451,7 +451,7 @@ def experiment_page():
         update_progress()
         
     # Navigation Buttons
-    col1, col2 = st.columns([1, 0.1])
+    col1, col2, col3 = st.columns([1, 7, 1])
 
     with col1:
         if st.button("Previous", disabled=(st.session_state.current_index == 0)):
@@ -460,7 +460,7 @@ def experiment_page():
             st.session_state.submitted = False  # Reset submission status
             st.rerun() 
 
-    with col2:
+    with col3:
         if st.button("Next", disabled=not st.session_state.submitted):
             # Only allow moving forward if the participant has submitted their judgment
             if st.session_state.current_index < len(st.session_state.statements) - 1:
