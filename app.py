@@ -1,9 +1,9 @@
+pip install gspread
 import streamlit as st
 import time
 import datetime
 import gspread
 import pandas as pd 
-from PIL import Image, ImageDraw, ImageFont
 import random
 import uuid 
 from google.oauth2.service_account import Credentials
