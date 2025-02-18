@@ -10,7 +10,7 @@ from streamlit.components.v1 import html
 
 # Google Sheets authentication
 scope = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
-creds = Credentials.from_service_account_file("human-ai-interaction-440111-74d9cddcb711.json", scopes=scope)
+creds = Credentials.from_service_account_file(st.secrets["google_service_account"], scopes=scope)
 client = gspread.authorize(creds)
 
 # Open your Google Sheet (replace "Sheet_Name" with your actual sheet name)
