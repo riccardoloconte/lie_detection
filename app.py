@@ -255,7 +255,7 @@ def example_page():
             When the slider is close to the midpoint (i.e., 50), it means that you don't really know whether the statement is truthful or deceptive.""")
  
     # Navigation Buttons
-    col1, col2, col3 = st.columns([1, 6.7, 1.3])
+    col1, col2, col3 = st.columns([1.3, 6.7, 1])
     with col1:
         if st.session_state.example_sub_page > 1:
             if st.button("Previous"):
