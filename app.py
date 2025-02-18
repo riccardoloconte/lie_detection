@@ -1,4 +1,3 @@
-pip install gspread
 import streamlit as st
 import time
 import datetime
