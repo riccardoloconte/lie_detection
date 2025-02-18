@@ -76,16 +76,16 @@ if 'example_sub_page' not in st.session_state:
 def go_to_next_page():
     if st.session_state.example_sub_page < 3:
         st.session_state.example_sub_page += 1
-        st.experimental_rerun()
+        st.rerun()
     else:
         update_progress()
         st.session_state.page = 'experiment'
-        st.experimental_rerun()
+        st.rerun()
 
 def go_to_previous_page():
     if st.session_state.example_sub_page > 1:
         st.session_state.example_sub_page -= 1
-        st.experimental_rerun()
+        st.rerun()
 
 # Define now the elements to display Confidence later on (this will avoid repetitions later on):
 labels = ["Very confident",
@@ -146,7 +146,7 @@ def welcome_page():
     if st.button("Next"):
         update_progress()
         st.session_state.page = 'consent'
-        st.experimental_rerun()
+        st.rerun()
     
 
 def consent_page():
@@ -181,13 +181,13 @@ def consent_page():
             st.session_state.consent_data = "Accepted"
             update_progress()
             st.session_state.page = 'instructions'
-            st.experimental_rerun()
+            st.rerun()
     with col2:
         if st.button("Deny"):
             st.session_state.consent_data = "Denied"
             update_progress()
             st.session_state.page = 'end'
-            st.experimental_rerun()
+            st.rerun()
 
 def instructions_page():
     show_progress_bar()
@@ -206,7 +206,7 @@ def instructions_page():
     if st.button("Next"):
         update_progress()
         st.session_state.page = 'example'
-        st.experimental_rerun()
+        st.rerun()
 
 
 def example_page():
@@ -458,7 +458,7 @@ def experiment_page():
             scroll_to_top()
             st.session_state.current_index -= 1
             st.session_state.submitted = False  # Reset submission status
-            st.experimental_rerun() 
+            st.rerun() 
 
     with col2:
         if st.button("Next", disabled=not st.session_state.submitted):
@@ -467,10 +467,10 @@ def experiment_page():
                 scroll_to_top()
                 st.session_state.current_index += 1
                 st.session_state.submitted = False  # Reset submission status for the next statement
-                st.experimental_rerun()  
+                st.rerun()  
             else:
                 st.session_state.page = 'final_questions'
-                st.experimental_rerun()
+                st.rerun()
 
 def final_questions():
     scroll_to_top()
@@ -527,7 +527,7 @@ def final_questions():
         # Store response_data in session state
         st.session_state.questions_data = questions_data
         st.session_state.page = 'feedback'
-        st.experimental_rerun()
+        st.rerun()
 
 def feedback_page():
     scroll_to_top()
@@ -560,7 +560,7 @@ def feedback_page():
         submit_to_sheet_2(combined_data)
         st.write("Thank you for your feedback.")
         st.session_state.page = 'end'
-        st.experimental_rerun()
+        st.rerun()
                  
 def end_page():
     update_progress()
