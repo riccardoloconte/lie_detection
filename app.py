@@ -451,7 +451,7 @@ def experiment_page():
         update_progress()
         
     # Navigation Buttons
-    col1, col2, col3 = st.columns([1, 7, 1])
+    col1, col2, col3 = st.columns([1.3, 6.7, 1])
 
     with col1:
         if st.button("Previous", disabled=(st.session_state.current_index == 0)):
