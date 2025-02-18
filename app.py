@@ -25,7 +25,7 @@ def submit_to_sheet_2(data):
     sheet_2.append_row(data)
 
 # Load the dataset (assuming it's in the same directory)
-@st.cache(ttl=60)  # Cache the data for 60 seconds
+@st.cache_data(ttl=60)  # Cache the data for 60 seconds
 def load_statements():
     return pd.read_csv("hippocorpus_test_set.csv", sep=";")
 
