@@ -479,7 +479,7 @@ def final_questions():
     st.write("Thank you for participating in the study. Please provide us with feedback about the study.")
     
     # AI vs Average Human
-    st.write("1. How good do you think the **average human performance** is compared to the performance of the intelligent lie detection algorithm in predicting whether a statement is true or false?")
+    st.write("1. How good do you think the **average human performance** is compared to the performance of the AI-based lie detector in predicting whether a statement is true or false?")
     st.session_state.algo_vs_avg_human = st.slider("", min_value=0, max_value=10, value=5, step=1)
     col1, col2, col3, col4, col5, col6 = st.columns([1.5,1,1,1.5,1,1.5])
     with col1:
@@ -490,7 +490,7 @@ def final_questions():
         st.markdown("<p style='text-align: right; color: grey; font-size: 0.9em;'><strong>Human performance is better</strong></p>", unsafe_allow_html=True)
     
     # AI vs Participant
-    st.write("2. How good do you think the **your performance** is compared to the performance of the intelligent lie detection algorithm in distinguishing truth from lies?")
+    st.write("2. How good do you think **your performance** is compared to the performance of the AI-based lie detector in distinguishing truth from lies?")
     st.session_state.algo_vs_yourself = st.slider(" ", min_value=0, max_value=10, value=5, step=1)
     col1, col2, col3, col4, col5, col6 = st.columns([1.5,1,1,1.5,1,1.5])
     with col1:
