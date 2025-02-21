@@ -476,7 +476,7 @@ def final_questions():
     scroll_to_top()
     show_progress_bar()
     st.title("Final questions")
-    st.write("Thank you for participating in the study. Please provide us with feedback about the study.")
+    st.write("Please reply to the following questions.")
 
     # Attention check for the Accuracy condition 
     st.write("1. In this experiment you were shown sentences that could be true or false accompanied by the prediction of an AI model. Do you remember how accurate this model was?")
