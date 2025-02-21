@@ -480,7 +480,7 @@ def final_questions():
 
     # Attention check for the Accuracy condition 
     st.write("1. In this experiment you were shown truthful or deceptive sentences accompanied by the prediction of an AI model. Do you remember how accurate this model was?")
-    st.session_state.attention_check_accuracy = st.radio(" ", ["54%", "89%", "I don't remember"])
+    st.session_state.attention_check_accuracy = st.radio(" ", ["I don't remember", "54%", "89%"])
 
     # AI vs Average Human
     st.write("2. How good do you think the **average human performance** is compared to the performance of the AI-based lie detector in predicting whether a statement is true or false?")
