@@ -586,7 +586,7 @@ def end_page():
     if st.button("Return to Prolific"):
         prolific_home_url = "https://www.prolific.com"
         st.markdown(f"<a href='{prolific_home_url}' target='_blank'>Click here if you're not automatically redirected</a>", unsafe_allow_html=True)
-        st.markdown(f'<meta http-equiv="refresh" content="0;url={prolific_completion_url}">', unsafe_allow_html=True)
+        st.markdown(f'<meta http-equiv="refresh" content="0;url={prolific_home_url}">', unsafe_allow_html=True)
 
 
 # Page Navigation Logic
