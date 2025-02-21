@@ -273,32 +273,32 @@ def example_page():
                 update_progress()
                 go_to_next_page()
                
-def insert_manipulation_checks(statements):
-    # Create manipulation check statements
-    manipulation_check_1 = pd.DataFrame([{
-        'truth-dec_pairID': 'manipulation_check_1',
+def insert_attention_checks(statements):
+    # Create attention check statements
+    attention_check_1 = pd.DataFrame([{
+        'truth-dec_pairID': 'attention_check_1',
         'text': """This is an attention check and serves to validate your participation. Please put the slider at the position 72. The rest of this statement is just a placeholder.
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                 Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
                 Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
                 Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.""",
-        'condition': 'manipulation_check',
+        'condition': 'attention_check',
         'confidence': 72
     }])
-    manipulation_check_2 = pd.DataFrame([{
-        'truth-dec_pairID': 'manipulation_check_2',
+    attention_check_2 = pd.DataFrame([{
+        'truth-dec_pairID': 'attention_check_2',
         'text': """This is an attention check and serves to validate your participation. Please put the slider at the position 33. The rest of this statement is just a placeholder.
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                 Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
                 Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
                 Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.""",
-        'condition': 'manipulation_check',
+        'condition': 'attention_check',
         'confidence': 33
     }])
 
-    # Insert manipulation checks at random positions
-    statements.insert(random.randint(0, len(statements)), manipulation_check_1)
-    statements.insert(random.randint(0, len(statements)), manipulation_check_2)
+    # Insert attention checks at random positions
+    statements.insert(random.randint(0, len(statements)), attention_check_1)
+    statements.insert(random.randint(0, len(statements)), attention_check_2)
     return statements 
 
 def experiment_page():
@@ -342,8 +342,8 @@ def experiment_page():
                 selected_statement = statements_in_range.sample(1)
                 selected_statements.append(selected_statement)
         
-        # Insert manipulation checks
-        selected_statements = insert_manipulation_checks(selected_statements)
+        # Insert attention checks
+        selected_statements = insert_attention_checks(selected_statements)
 
         st.session_state.statements = pd.concat(selected_statements).sample(frac=1).reset_index(drop=True)
         st.session_state.current_index = 0  # Initialize index for the first statement
@@ -392,8 +392,8 @@ def experiment_page():
     else:
         st.write(":robot_face: **An AI-based lie detector with 89% accuracy has provided the following judgment for this statement** :arrow_down:")
 
-    if st.session_state.statement_condition == 'manipulation_check':
-        ai_judgment = int(statement_row['confidence'])  # Set AI judgment to the specified value for manipulation checks
+    if st.session_state.statement_condition == 'attention_check':
+        ai_judgment = int(statement_row['confidence'])  # Set AI judgment to the specified value for attention checks
     else:
         ai_judgment = st.session_state[f'ai_judgment_{st.session_state.current_index}']
 
@@ -477,9 +477,13 @@ def final_questions():
     show_progress_bar()
     st.title("Final questions")
     st.write("Thank you for participating in the study. Please provide us with feedback about the study.")
-    
+
+    # Attention check for the Accuracy condition 
+    st.write("1. In this experiment you were shown sentences that could be true or false accompanied by the prediction of an AI model. Do you remember how accurate this model was?")
+    st.session_state.attention_check_accuracy = st.radio(" ", ["54%", "89%", "I don't remember"])
+
     # AI vs Average Human
-    st.write("1. How good do you think the **average human performance** is compared to the performance of the AI-based lie detector in predicting whether a statement is true or false?")
+    st.write("2. How good do you think the **average human performance** is compared to the performance of the AI-based lie detector in predicting whether a statement is true or false?")
     st.session_state.algo_vs_avg_human = st.slider("", min_value=0, max_value=10, value=5, step=1)
     col1, col2, col3, col4, col5, col6 = st.columns([1.5,1,1,1.5,1,1.5])
     with col1:
@@ -490,7 +494,7 @@ def final_questions():
         st.markdown("<p style='text-align: right; color: grey; font-size: 0.9em;'><strong>Human performance is better</strong></p>", unsafe_allow_html=True)
     
     # AI vs Participant
-    st.write("2. How good do you think **your performance** is compared to the performance of the AI-based lie detector in distinguishing truth from lies?")
+    st.write("3. How good do you think **your performance** is compared to the performance of the AI-based lie detector in distinguishing truth from lies?")
     st.session_state.algo_vs_yourself = st.slider(" ", min_value=0, max_value=10, value=5, step=1)
     col1, col2, col3, col4, col5, col6 = st.columns([1.5,1,1,1.5,1,1.5])
     with col1:
@@ -501,7 +505,7 @@ def final_questions():
         st.markdown("<p style='text-align: right; color: grey; font-size: 0.9em;'><strong>My performance is better</strong></p>", unsafe_allow_html=True)
 
     # Familiarity with ML 
-    st.write("3. How familiar are you with AI-based algorithms?")
+    st.write("4. How familiar are you with AI-based algorithms?")
     st.session_state.ML_familiarity = st.slider("  ", min_value=0, max_value=10, value = 5, step=1)
     col1, col2, col3, col4, col5, col6 = st.columns([1.5,1,1,1.5,1,1.5])
     with col1:
@@ -520,6 +524,7 @@ def final_questions():
             st.session_state.prolific_id,
             st.session_state.participant_id,
             st.session_state.consent_data,
+            st.session_state.attention_check_accuracy,
             st.session_state.algo_vs_avg_human,
             st.session_state.algo_vs_yourself,
             st.session_state.ML_familiarity]
@@ -537,18 +542,20 @@ def feedback_page():
     st.write("Please provide us with feedback about the study. Your feedback is valuable to us and will help us improve our study.")
     
     st.write("**1. How much were you motivated to perform well?**")
-    st.session_state.like_scale = st.slider("0 = Not at all, 10 = Very much", min_value=0, max_value=10, value=5, step=1)
+    st.session_state.motivation_scale = st.slider("0 = Not at all, 10 = Very much", min_value=0, max_value=10, value=5, step=1)
 
     st.write("**2. How difficult did you find the study?**")
     st.session_state.difficulty_scale = st.slider("0 = Very easy, 10 = Very difficult", min_value=0, max_value=10, value=5, step=1)
     
-    st.write("You can leave here any comment about this expeirment. Please click on the button below to submit your feedback.")
+    st.write("(Optional) You can leave here any comment about this experiment.")
     st.session_state.feedback = st.text_area("Feedback")
-   
+
+    st.write("Please click on the button below to submit your feedback.")
+    
     if st.button("Submit Feedback"):
         update_progress()
         feedback_data = [
-            st.session_state.like_scale,
+            st.session_state.motivation_scale,
             st.session_state.difficulty_scale,
             st.session_state.feedback]
         
