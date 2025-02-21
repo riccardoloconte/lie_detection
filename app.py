@@ -479,7 +479,7 @@ def final_questions():
     st.write("Please reply to the following questions.")
 
     # Attention check for the Accuracy condition 
-    st.write("1. In this experiment you were shown sentences that could be true or false accompanied by the prediction of an AI model. Do you remember how accurate this model was?")
+    st.write("1. In this experiment you were shown truthful or deceptive sentences accompanied by the prediction of an AI model. Do you remember how accurate this model was?")
     st.session_state.attention_check_accuracy = st.radio(" ", ["54%", "89%", "I don't remember"])
 
     # AI vs Average Human
