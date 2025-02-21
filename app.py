@@ -547,7 +547,7 @@ def feedback_page():
     st.write("**2. How difficult did you find the study?**")
     st.session_state.difficulty_scale = st.slider("0 = Very easy, 10 = Very difficult", min_value=0, max_value=10, value=5, step=1)
     
-    st.write("(Optional) You can leave here any comment about this experiment.")
+    st.write("**3. You can leave here any comment about this experiment (Optional).**")
     st.session_state.feedback = st.text_area("Feedback")
 
     st.write("Please click on the button below to submit your feedback.")
