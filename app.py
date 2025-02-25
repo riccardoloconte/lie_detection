@@ -61,7 +61,7 @@ if 'current_step' not in st.session_state:
 
 # Retrieve Prolific ID from query parameters
 if 'prolific_id' not in st.session_state:
-    st.session_state.prolific_id = st.query_params.get("PROLIFIC_PID", "no_prolific_id")  
+    st.session_state.prolific_id = st.query_params.get("PROLIFIC_PID", ["no_prolific_id"])  
 
 # Initialize participant ID if it doesn't exist
 if 'participant_id' not in st.session_state:
