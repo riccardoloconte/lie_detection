@@ -1,4 +1,4 @@
 gspread
-streamlit
+streamlit==1.28
 pandas
 google-auth
