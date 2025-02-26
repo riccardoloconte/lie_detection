@@ -19,10 +19,10 @@ sheet_2 = client.open("Save data").get_worksheet(1)  # Access the second sheet
 
 # Function to submit data to Google Sheets
 def submit_to_sheet_1(data):
-    sheet_1.append_row([data])
+    sheet_1.append_rows([data])
 
 def submit_to_sheet_2(data):
-    sheet_2.append_row([data])
+    sheet_2.append_rows([data])
 
 # Load the dataset (assuming it's in the same directory)
 @st.cache_data(ttl=1800)  # Cache the data for 60 seconds
