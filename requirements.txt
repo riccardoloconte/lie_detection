@@ -1,4 +1,5 @@
 gspread
 streamlit==1.28
 pandas
+st-gsheets-connection
 google-auth
