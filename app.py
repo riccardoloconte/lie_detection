@@ -7,6 +7,7 @@ import random
 import uuid 
 from google.oauth2.service_account import Credentials
 from streamlit.components.v1 import html
+from streamlit_gsheets import GSheetsConnection
 
 # Create a connection object
 conn = st.connection("gsheets", type=GSheetsConnection)
