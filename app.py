@@ -3,6 +3,7 @@ import time
 import datetime
 import gspread
 import pandas as pd 
+import numpy as np
 import random
 import uuid 
 import streamlit_gsheets
