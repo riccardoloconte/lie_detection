@@ -14,7 +14,7 @@ from streamlit_gsheets import GSheetsConnection
 conn = st.connection("gsheets", type=GSheetsConnection)
 df = conn.read()
 
-df = conn.read(worksheet="Sheet1",ttl="20m", usecols=[0, 1] nrows=3)
+df = conn.read(worksheet="Sheet1",ttl="20m", usecols=[0, 1], nrows=3)
 
 # Function to submit data to Google Sheets
 # Initialize a list to accumulate data
