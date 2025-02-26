@@ -7,17 +7,14 @@ import random
 import uuid 
 from google.oauth2.service_account import Credentials
 from streamlit.components.v1 import html
-import streamlit_gsheets
+import streamlit_gsheets 
 from streamlit_gsheets import GSheetsConnection
 
 # Create a connection object
 conn = st.connection("gsheets", type=GSheetsConnection)
 df = conn.read()
 
-df = conn.read(worksheet="Sheet1",ttl="20m",
-    usecols=[0, 1],
-    nrows=3,
-)
+df = conn.read(worksheet="Sheet1",ttl="20m", usecols=[0, 1] nrows=3)
 
 # Function to submit data to Google Sheets
 # Initialize a list to accumulate data
