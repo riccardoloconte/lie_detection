@@ -24,7 +24,7 @@ def submit_to_sheet_1(data):
     st.session_state.batch_data_1.append(data)
     
     # Check if the batch size is reached
-    if len(st.session_state.batch_data_1) >= 10:  # Adjust the batch size as needed
+    if len(st.session_state.batch_data_1) == 12:  
         flat_data = [[item if not isinstance(item, list) else item[0] for item in row] for row in st.session_state.batch_data_1]
         conn.write(flat_data, worksheet="Sheet1")
         st.session_state.batch_data_1 = []  # Clear the batch after submission
