@@ -19,13 +19,17 @@ sheet_2 = client.open("Save data").get_worksheet(1)  # Access the second sheet
 
 # Function to submit data to Google Sheets
 def submit_to_sheet_1(data):
-    flat_data = [item if not isinstance(item, list) else item[0] for item in data]
-    sheet_1.append_row(flat_data)
+    if not isinstance(data[0], list):
+        data = [data]
+    flat_data = [[item if not isinstance(item, list) else item[0] for item in row] for row in data]
+    sheet_1.append_rows(flat_data)
 
 def submit_to_sheet_2(data):
-    flat_data = [item if not isinstance(item, list) else item[0] for item in data]
-    sheet_2.append_row(flat_data)
-
+    if not isinstance(data[0], list):
+        data = [data]
+    flat_data = [[item if not isinstance(item, list) else item[0] for item in row] for row in data]
+    sheet_2.append_rows(flat_data)
+    
 # Load the dataset (assuming it's in the same directory)
 @st.cache_data(ttl=1800)  # Cache the data for 60 seconds
 def load_statements():
