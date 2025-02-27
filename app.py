@@ -18,22 +18,22 @@ participant_data = conn.read(worksheet="Sheet2", usecols=list(range(12)), ttl=5)
 
 # Function to submit data to Google Sheets
 # Initialize a list to accumulate data
-def submit_to_sheet_1(data):
+#def submit_to_sheet_1(data):
     # Accumulate data in the session state
-    if 'batch_data_1' not in st.session_state:
-        st.session_state.batch_data_1 = []
-    st.session_state.batch_data_1.append(data)
+    #if 'batch_data_1' not in st.session_state:
+    #    st.session_state.batch_data_1 = []
+    #st.session_state.batch_data_1.append(data)
     
     # Check if the batch size is reached
-    if len(st.session_state.batch_data_1) == 12:  # Adjust the batch size as needed
-        flat_data = [[item if not isinstance(item, list) else item[0] for item in row] for row in st.session_state.batch_data_1]
-        conn.update(worksheet="Sheet1", data=flat_data)
-        st.session_state.batch_data_1 = []  # Clear the batch after submission
+    #if len(st.session_state.batch_data_1) == 12:  # Adjust the batch size as needed
+    #    flat_data = [[item if not isinstance(item, list) else item[0] for item in row] for row in st.session_state.batch_data_1]
+    #    conn.update(worksheet="Sheet1", data=flat_data)
+    #    st.session_state.batch_data_1 = []  # Clear the batch after submission
 
+def submit_to_sheet_1(data):
+    conn.update(worksheet="Sheet1=,data=data)
+                
 def submit_to_sheet_2(data):
-    #if not isinstance(data[0], list):
-    #    data = [data]
-    #flat_data = [[item if not isinstance(item, list) else item[0] for item in row] for row in data]
     conn.update(worksheet="Sheet2",data=data.values.tolist())
 
 # Load the dataset (assuming it's in the same directory)
@@ -466,7 +466,7 @@ def experiment_page():
         
         updated_df = pd.concat([experiment_data, response_data], ignore_index=True)
        
-        submit_to_sheet_1(updated_df)  # Save response to Google Sheets
+        #submit_to_sheet_1(updated_df)  # Save response to Google Sheets
         st.session_state.submitted = True 
         st.success("Your judgment has been recorded!")
         update_progress()
@@ -491,6 +491,7 @@ def experiment_page():
                 st.rerun()  
             else:
                 st.session_state.page = 'final_questions'
+                submit_to_sheet_1(updated_df) 
                 st.rerun()
 
 def final_questions():
@@ -595,7 +596,7 @@ def feedback_page():
         
         # Concatenate all data into a single list
         combined_data = pd.concat([questions_data,feedback_data], axis=1)
-        updated_combined_data = pd.concat([participant_data, combined_data], axis=1)
+        updated_combined_data = pd.concat([participant_data, combined_data], ignore_index=True)
         
         submit_to_sheet_2(updated_combined_data)
         st.write("Thank you for your feedback.")
