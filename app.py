@@ -13,8 +13,8 @@ from streamlit_gsheets import GSheetsConnection
 
 # Create a connection object
 conn = st.connection("gsheets", type=GSheetsConnection)  
-experiment_data = conn.read(worksheet="Sheet1",ttl="20m", usecols=list(range(13)))
-participant_data = conn.read(worksheet="Sheet2",ttl="20m", usecols=list(range(12)))
+experiment_data = conn.read(worksheet="Sheet1",ttl="20m", usecols=list(range(13)), ttl=5)
+participant_data = conn.read(worksheet="Sheet2",ttl="20m", usecols=list(range(12)), ttl=5)
 
 # Function to submit data to Google Sheets
 # Initialize a list to accumulate data
@@ -154,6 +154,9 @@ def welcome_page():
     st.write("""In this study, we are investigating how people make decisions when evaluating the veracity of statements. 
              We will now give you detailed instructions. **Please read them carefully.**
              \nOnce you complete the experiment, you will be redirected to Prolific.""")
+
+    st.dataframe(experiment_data)
+    st.dataframe(participant_data)
     
     if st.button("Next"):
         update_progress()
