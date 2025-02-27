@@ -327,6 +327,9 @@ def experiment_page():
         st.session_state.start_time = time.time()
     if f'start_time_{st.session_state.current_index}' not in st.session_state:
         st.session_state[f'start_time_{st.session_state.current_index}'] = time.time()
+    if 'experiment_data' not in st.session_state:
+        st.session_state.experiment_data = pd.DataFrame()
+
 
     def adjust_ai_confidence(confidence, condition):
         if condition == "accuracy_low":
