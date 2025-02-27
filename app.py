@@ -31,10 +31,10 @@ def submit_to_sheet_1(data):
         st.session_state.batch_data_1 = []  # Clear the batch after submission
 
 def submit_to_sheet_2(data):
-    if not isinstance(data[0], list):
-        data = [data]
-    flat_data = [[item if not isinstance(item, list) else item[0] for item in row] for row in data]
-    conn.update(worksheet="Sheet2",data=flat_data)
+    #if not isinstance(data[0], list):
+    #    data = [data]
+    #flat_data = [[item if not isinstance(item, list) else item[0] for item in row] for row in data]
+    conn.update(worksheet="Sheet2",data)
 
 # Load the dataset (assuming it's in the same directory)
 @st.cache_data(ttl=1800)  # Cache the data for 60 seconds
