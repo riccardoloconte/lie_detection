@@ -13,8 +13,8 @@ from streamlit_gsheets import GSheetsConnection
 
 # Create a connection object
 conn = st.connection("gsheets", type=GSheetsConnection)  
-experiment_data = conn.read(worksheet="Sheet1",ttl="20m", usecols=list(range(13)), ttl=5)
-participant_data = conn.read(worksheet="Sheet2",ttl="20m", usecols=list(range(12)), ttl=5)
+experiment_data = conn.read(worksheet="Sheet1", usecols=list(range(13)), ttl=5)
+participant_data = conn.read(worksheet="Sheet2", usecols=list(range(12)), ttl=5)
 
 # Function to submit data to Google Sheets
 # Initialize a list to accumulate data
