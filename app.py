@@ -154,9 +154,6 @@ def welcome_page():
     st.write("""In this study, we are investigating how people make decisions when evaluating the veracity of statements. 
              We will now give you detailed instructions. **Please read them carefully.**
              \nOnce you complete the experiment, you will be redirected to Prolific.""")
-
-    st.dataframe(experiment_data)
-    st.dataframe(participant_data)
     
     if st.button("Next"):
         update_progress()
