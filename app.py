@@ -27,14 +27,14 @@ def submit_to_sheet_1(data):
     # Check if the batch size is reached
     if len(st.session_state.batch_data_1) == 12:  # Adjust the batch size as needed
         flat_data = [[item if not isinstance(item, list) else item[0] for item in row] for row in st.session_state.batch_data_1]
-        conn.update(flat_data, worksheet="Sheet1")
+        conn.update(worksheet="Sheet1", data=flat_data)
         st.session_state.batch_data_1 = []  # Clear the batch after submission
 
 def submit_to_sheet_2(data):
     if not isinstance(data[0], list):
         data = [data]
     flat_data = [[item if not isinstance(item, list) else item[0] for item in row] for row in data]
-    conn.update(flat_data, worksheet="Sheet2")
+    conn.update(worksheet="Sheet2",data=flat_data)
 
 # Load the dataset (assuming it's in the same directory)
 @st.cache_data(ttl=1800)  # Cache the data for 60 seconds
