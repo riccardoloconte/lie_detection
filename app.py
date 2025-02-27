@@ -595,7 +595,7 @@ def feedback_page():
         
         # Concatenate all data into a single list
         combined_data =  questions_data + feedback_data 
-        updated_combined_data = pd.concat([participants_data,combined_data], axis=1)
+        updated_combined_data = pd.concat([participant_data, combined_data], axis=1)
         
         submit_to_sheet_2(updated_combined_data)
         st.write("Thank you for your feedback.")
