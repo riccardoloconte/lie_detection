@@ -455,7 +455,7 @@ def experiment_page():
                     'statement_id': st.session_state.statement_id,
                     'text': st.session_state.statement_text,
                     'statement_condition': st.session_state.statement_condition,
-                    'confidence_range': str(st.session_state.statement_confidence_range),
+                    'confidence_range': st.session_state.statement_confidence_range,
                     'duration': duration,
                     'correct_prediction': correct_prediction,
                     'ai_judgment': ai_judgment,
@@ -547,7 +547,7 @@ def final_questions():
                     'prolific_id': st.session_state.prolific_id,
                     'participant_id': st.session_state.participant_id,
                     'consent': st.session_state.consent_data,
-                    'manipulation_check_accuracy': st.session_state.attention_check_accuracy,
+                    'attention_check_accuracy': st.session_state.attention_check_accuracy,
                     'algo_vs_avg_human': st.session_state.algo_vs_avg_human,
                     'algo_vs_yourself': st.session_state.algo_vs_yourself,
                     'ML_familiarity': st.session_state.ML_familiarity
