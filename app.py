@@ -322,10 +322,10 @@ def experiment_page():
    # Initialize session state attributes if not already initialized
     if 'current_index' not in st.session_state:
         st.session_state.current_index = 0
-    if 'experiment_condition' not in st.session_state:
+    if 'accuracy_condition' not in st.session_state:
         random.seed(st.session_state.participant_id)  # Set a different seed each time
         conditions = random.choice(["accuracy_low", "accuracy_high"])
-        st.session_state.experiment_condition = conditions
+        st.session_state.accuracy_condition = conditions
     if 'start_time' not in st.session_state:
         st.session_state.start_time = time.time()
     if f'start_time_{st.session_state.current_index}' not in st.session_state:
@@ -378,7 +378,7 @@ def experiment_page():
     
     # Adjust AI confidence based on experiment condition
     if f'ai_judgment_{st.session_state.current_index}' not in st.session_state:
-        adjusted_confidence = adjust_ai_confidence(int(statement_row['confidence']), st.session_state.experiment_condition)
+        adjusted_confidence = adjust_ai_confidence(int(statement_row['confidence']), st.session_state.accuracy_condition)
         st.session_state[f'ai_judgment_{st.session_state.current_index}'] = adjusted_confidence
         st.session_state[f'correct_prediction_{st.session_state.current_index}'] = is_prediction_correct(adjusted_confidence, statement_row['condition'])
     
@@ -402,7 +402,7 @@ def experiment_page():
     participant_judgment_key = f'participant_judgment_{st.session_state.current_index}'
 
     # Display condition-based AI slider message
-    if st.session_state.experiment_condition == 'accuracy_low':
+    if st.session_state.accuracy_condition == 'accuracy_low':
         st.write(":robot_face: **An AI-based lie detector with 54% accuracy has provided the following judgment for this statement** :arrow_down:")
     else:
         st.write(":robot_face: **An AI-based lie detector with 89% accuracy has provided the following judgment for this statement** :arrow_down:")
