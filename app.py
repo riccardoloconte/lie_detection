@@ -328,7 +328,9 @@ def experiment_page():
     if f'start_time_{st.session_state.current_index}' not in st.session_state:
         st.session_state[f'start_time_{st.session_state.current_index}'] = time.time()
     if 'experiment_data' not in st.session_state:
-        st.session_state.experiment_data = pd.DataFrame()
+        st.session_state.experiment_data = conn.read(worksheet="Sheet1", usecols=list(range(13)), ttl=5)
+    if 'combined_data' not in st.session_state:
+        st.session_state.combined_data = pd.DataFrame()
 
 
     def adjust_ai_confidence(confidence, condition):
@@ -465,7 +467,7 @@ def experiment_page():
         )
 
         # Append response data to experiment_data in session state
-        st.session_state.experiment_data = pd.concat([st.session_state.experiment_data, response_data], ignore_index=True)
+        st.session_state.combined_data = pd.concat([st.session_state.experiment_data, response_data], ignore_index=True)
        
         st.session_state.submitted = True 
         st.success("Your judgment has been recorded!")
@@ -491,7 +493,7 @@ def experiment_page():
                 st.rerun()  
             else:
                 st.session_state.page = 'final_questions'
-                submit_to_sheet_1(st.session_state.experiment_data) 
+                submit_to_sheet_1(st.session_state.combined_data) 
                 st.rerun()
 
 def final_questions():
