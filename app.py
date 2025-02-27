@@ -26,14 +26,12 @@ def submit_to_sheet_1(data):
     # Check if the batch size is reached
     if len(st.session_state.batch_data_1) == 12:  
         flat_data = [[item if not isinstance(item, list) else item[0] for item in row] for row in st.session_state.batch_data_1]
-        conn.write(flat_data, worksheet="Sheet1")
+        #conn.write(flat_data, worksheet="Sheet1")
+        conn.update(worksheet="Sheet1", data=flat_data)
         st.session_state.batch_data_1 = []  # Clear the batch after submission
 
 def submit_to_sheet_2(data):
-    # Accumulate data in the session state
-    if 'batch_data_2' not in st.session_state:
-        st.session_state.batch_data_2 = []
-    st.session_state.batch_data_2.append(data)
+    conn.update(worksheet="Sheet2", data=data)
 
 # Google Sheets authentication
 #scope = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
