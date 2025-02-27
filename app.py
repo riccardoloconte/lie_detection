@@ -31,7 +31,7 @@ participant_data = conn.read(worksheet="Sheet2", usecols=list(range(12)), ttl=5)
     #    st.session_state.batch_data_1 = []  # Clear the batch after submission
 
 def submit_to_sheet_1(data):
-    conn.update(worksheet="Sheet1=,data=data)
+    conn.update(worksheet="Sheet1",data=data)
                 
 def submit_to_sheet_2(data):
     conn.update(worksheet="Sheet2",data=data.values.tolist())
@@ -597,8 +597,8 @@ def feedback_page():
         # Concatenate all data into a single list
         combined_data = pd.concat([questions_data,feedback_data], axis=1)
         updated_combined_data = pd.concat([participant_data, combined_data], ignore_index=True)
-        
         submit_to_sheet_2(updated_combined_data)
+        
         st.write("Thank you for your feedback.")
         st.session_state.page = 'end'
         st.rerun()
