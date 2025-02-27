@@ -12,8 +12,9 @@ from streamlit.components.v1 import html
 from streamlit_gsheets import GSheetsConnection
 
 # Create a connection object
-conn = st.connection("gsheets", type=GSheetsConnection)
-df = conn.read(worksheet="Sheet1",ttl="20m", usecols=[0, 1], nrows=3)
+conn = st.connection("gsheets", type=GSheetsConnection)  
+experiment_data = conn.read(worksheet="Sheet1",ttl="20m", usecols=list(range(13)))
+participant_data = conn.read(worksheet="Sheet2",ttl="20m", usecols=list(range(12)))
 
 # Function to submit data to Google Sheets
 # Initialize a list to accumulate data
@@ -24,44 +25,16 @@ def submit_to_sheet_1(data):
     st.session_state.batch_data_1.append(data)
     
     # Check if the batch size is reached
-    if len(st.session_state.batch_data_1) == 12:  
+    if len(st.session_state.batch_data_1) == 12:  # Adjust the batch size as needed
         flat_data = [[item if not isinstance(item, list) else item[0] for item in row] for row in st.session_state.batch_data_1]
-        #conn.write(flat_data, worksheet="Sheet1")
-        conn.update(worksheet="Sheet1", data=flat_data)
+        conn.update(flat_data, worksheet="Sheet1")
         st.session_state.batch_data_1 = []  # Clear the batch after submission
 
 def submit_to_sheet_2(data):
-    conn.update(worksheet="Sheet2", data=data)
-
-# Google Sheets authentication
-#scope = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
-#creds = Credentials.from_service_account_info(st.secrets["google_service_account"], scopes=scope)
-#client = gspread.authorize(creds)
-
-# Open your Google Sheet (replace "Sheet_Name" with your actual sheet name)
-#sheet_1 = client.open("Save data").sheet1  # Access the first sheet
-#sheet_2 = client.open("Save data").get_worksheet(1)  # Access the second sheet
-
-# Function to submit data to Google Sheets
-# Initialize a list to accumulate data
-#if 'batch_data_1' not in st.session_state:
-#    st.session_state.batch_data_1 = []
-
-#def submit_to_sheet_1(data):
-#    # Accumulate data in the session state
-#    st.session_state.batch_data_1.append(data)
-    
-#    # Check if the batch size is reached
-#    if len(st.session_state.batch_data_1) == 12:  
-#        flat_data = [[item if not isinstance(item, list) else item[0] for item in row] for row in st.session_state.batch_data_1]
-#        sheet_1.append_rows(flat_data)
-#        st.session_state.batch_data_1 = []  # Clear the batch after submission
-
-#def submit_to_sheet_2(data):
-#    if not isinstance(data[0], list):
-#        data = [data]
-#    flat_data = [[item if not isinstance(item, list) else item[0] for item in row] for row in data]
-#    sheet_2.append_rows(flat_data)
+    if not isinstance(data[0], list):
+        data = [data]
+    flat_data = [[item if not isinstance(item, list) else item[0] for item in row] for row in data]
+    conn.update(flat_data, worksheet="Sheet2")
 
 # Load the dataset (assuming it's in the same directory)
 @st.cache_data(ttl=1800)  # Cache the data for 60 seconds
@@ -468,23 +441,29 @@ def experiment_page():
         # Record date
         current_date = datetime.datetime.now().strftime("%Y-%m-%d")
 
-        response_data = [
-            current_date,
-            st.session_state.experiment_condition,
-            st.session_state.prolific_id,
-            st.session_state.participant_id,
-            st.session_state.consent_data,
-            st.session_state.statement_id,
-            st.session_state.statement_text,
-            st.session_state.statement_condition,
-            str(st.session_state.statement_confidence_range),
-            float(st.session_state[f'duration_{st.session_state.current_index}']),
-            bool(correct_prediction),
-            ai_judgment,
-            participant_judgment,       
+        response_data = pd.DataFrame(
+            [
+                {
+                    'date': current_date,
+                    'accuracy_condition': st.session_state.accuracy_condition,
+                    'prolific_id': st.session_state.prolific_id,
+                    'participant_id': st.session_state.participant_id,
+                    'consent': st.session_state.consent_data,
+                    'statement_id': st.session_state.statement_id,
+                    'text': st.session_state.statement_text,
+                    'statement_condition': st.session_state.statement_condition,
+                    'confidence_range': str(st.session_state.statement_confidence_range),
+                    'duration': duration,
+                    'correct_prediction': correct_prediction,
+                    'ai_judgment': ai_judgment,
+                    'participant_judgment': participant_judgment,
+                }
             ]
+        )
         
-        submit_to_sheet_1(response_data)  # Save response to Google Sheets
+        updated_df = pd.concat([experiment_data, response_data], ignore_index=True)
+       
+        submit_to_sheet_1(updated_df)  # Save response to Google Sheets
         st.session_state.submitted = True 
         st.success("Your judgment has been recorded!")
         update_progress()
@@ -557,16 +536,21 @@ def final_questions():
     if st.button("Next"):
         update_progress()
         current_date = datetime.datetime.now().strftime("%Y-%m-%d")
-        questions_data = [
-            current_date,
-            st.session_state.experiment_condition,
-            st.session_state.prolific_id,
-            st.session_state.participant_id,
-            st.session_state.consent_data,
-            st.session_state.attention_check_accuracy,
-            st.session_state.algo_vs_avg_human,
-            st.session_state.algo_vs_yourself,
-            st.session_state.ML_familiarity]
+        questions_data = pd.DataFrame(
+            [
+                {
+                    'date': current_date,
+                    'accuracy_condition': st.session_state.accuracy_condition,
+                    'prolific_id': st.session_state.prolific_id,
+                    'participant_id': st.session_state.participant_id,
+                    'consent': st.session_state.consent_data,
+                    'manipulation_check_accuracy': st.session_state.attention_check_accuracy,
+                    'algo_vs_avg_human': st.session_state.algo_vs_avg_human,
+                    'algo_vs_yourself': st.session_state.algo_vs_yourself,
+                    'ML_familiarity': st.session_state.ML_familiarity
+                }
+            ]
+        )
         
         # Store response_data in session state
         st.session_state.questions_data = questions_data
@@ -593,17 +577,24 @@ def feedback_page():
     
     if st.button("Submit Feedback"):
         update_progress()
-        feedback_data = [
-            st.session_state.motivation_scale,
-            st.session_state.difficulty_scale,
-            st.session_state.feedback]
+        feedback_data = pd.DataFrame(
+            [
+                {
+                    "motivation": st.session_state.motivation_scale,
+                    "difficulty": st.session_state.difficulty_scale,
+                    "feedback": st.session_state.feedback
+                }
+            ]
+        )
         
         # Retrieve response_data and questions_data from session state
         questions_data = st.session_state.questions_data
         
         # Concatenate all data into a single list
         combined_data =  questions_data + feedback_data 
-        submit_to_sheet_2(combined_data)
+        updated_combined_data = pd.concat([participants_data,combined_data], axis=1)
+        
+        submit_to_sheet_2(updated_combined_data)
         st.write("Thank you for your feedback.")
         st.session_state.page = 'end'
         st.rerun()
