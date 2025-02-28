@@ -425,13 +425,13 @@ def experiment_page():
     display_confidence_labels(labels, style)   # Display confidence labels 
     display_truthful_deceptive_labels() # Display true-false labels
 
-    # Show warning if the slider hasn't been moved
-    if not st.session_state.slider_moved:
-        st.warning("Please move the slider!", icon="⚠️")
-            
+    
     # Submit Button Logic
     if st.button("Submit"):
-
+        # Show warning if the slider hasn't been moved
+        if not st.session_state.slider_moved:
+                st.warning("Please move the slider!", icon="⚠️")
+            
         # Record duration of the current trial
         st.session_state[f'end_time_{st.session_state.current_index}'] = time.time()
         duration = st.session_state[f'end_time_{st.session_state.current_index}'] - st.session_state[f'start_time_{st.session_state.current_index}']
