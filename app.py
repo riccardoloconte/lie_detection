@@ -31,7 +31,9 @@ participant_data = conn.read(worksheet="Sheet2", usecols=list(range(12)), ttl=5)
     #    st.session_state.batch_data_1 = []  # Clear the batch after submission
 
 def submit_to_sheet_1(data):
-    conn.update(worksheet="Sheet1",data=data)
+    existing_data = conn.read(worksheet="Sheet1", usecols=list(range(13)), ttl=5)
+    combined_data = pd.concat([existing_data, data], ignore_index=True)
+    conn.write(combined_data.values.tolist(), worksheet="Sheet1")
                 
 def submit_to_sheet_2(data):
     conn.update(worksheet="Sheet2",data=data.values.tolist())
@@ -328,7 +330,7 @@ def experiment_page():
     if f'start_time_{st.session_state.current_index}' not in st.session_state:
         st.session_state[f'start_time_{st.session_state.current_index}'] = time.time()
     if 'experiment_data' not in st.session_state:
-        st.session_state.experiment_data = conn.read(worksheet="Sheet1", usecols=list(range(13)), ttl=5)
+        st.session_state.experiment_data = pd.DataFrame()
 
     def adjust_ai_confidence(confidence, condition):
         if condition == "accuracy_low":
@@ -465,8 +467,7 @@ def experiment_page():
 
         # Append response data to experiment_data in session state
         st.session_state.experiment_data = pd.concat([st.session_state.experiment_data, response_data], ignore_index=True)
-        st.session_state.experiment_data = combined_data
-       
+
         st.session_state.submitted = True 
         st.success("Your judgment has been recorded!")
         update_progress()
