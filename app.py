@@ -199,8 +199,7 @@ def instructions_page():
     st.write("Your task is to guess whether each statement is truthful :white_check_mark: or a lie :lying_face:")
     st.write("These statements were randomly selected from a larger dataset where half of all statements are truthful, and half of them are lies.")
 
-    st.write("""To help you with your task, we provide you with the predictions of a state-of-the-art lie detection algorithm based on artificial intelligence (AI) :robot_face:
-                This algorithm shows better performance in distinguishing truth from lies than the average human.""")
+    st.write("To help you with your task, we provide you with the predictions of a lie detection algorithm based on artificial intelligence (AI) :robot_face:.")
     st.write("You'll see an example on the next pages.")
     
     st.write("**Please note that you should read the statements carefully, as after the task you will also have to take a quick quiz. The quiz serves to validate your participation.**")
