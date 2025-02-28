@@ -431,6 +431,7 @@ def experiment_page():
         # Show warning if the slider hasn't been moved
         if not st.session_state.slider_moved:
                 st.warning("Please move the slider!", icon="⚠️")
+                return # Prevent submission and navigation
             
         # Record duration of the current trial
         st.session_state[f'end_time_{st.session_state.current_index}'] = time.time()
@@ -472,6 +473,7 @@ def experiment_page():
         if st.session_state.current_index < len(st.session_state.statements) - 1:
             st.session_state.current_index += 1
             st.session_state.submitted = False  # Reset submission status for the next statement
+            st.session_state.slider_moved = False  # Reset slider moved status for the next statement
             st.rerun()  
         else:
             conn.update(worksheet="Sheet1", data=combined_data)
