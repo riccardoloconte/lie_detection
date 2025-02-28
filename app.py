@@ -13,8 +13,11 @@ from streamlit_gsheets import GSheetsConnection
 
 # Create a connection object
 conn = st.connection("gsheets", type=GSheetsConnection)  
-experiment_data = conn.read(worksheet="Sheet1", usecols=list(range(13)), ttl=5)
-participant_data = conn.read(worksheet="Sheet2", usecols=list(range(12)), ttl=5)
+#experiment_data = conn.read(worksheet="Sheet1", usecols=list(range(13)), ttl=5)
+#participant_data = conn.read(worksheet="Sheet2", usecols=list(range(12)), ttl=5)
+
+if 'experiment_responses' not in st.session_state:
+        st.session_state.experiment_responses = pd.DataFrame()
 
 # Function to submit data to Google Sheets
 # Initialize a list to accumulate data
@@ -37,7 +40,7 @@ def submit_to_sheet_1(data):
                 
 def submit_to_sheet_2(data):
     participant_data = conn.read(worksheet="Sheet2", usecols=list(range(12)), ttl=5)
-    updated_combined_data = pd.concat([participant_data, combined_data], ignore_index=True)
+    updated_combined_data = pd.concat([participant_data, data], ignore_index=True)
     conn.write(updated_combined_data.value.tolist(), worksheet="Sheet2")
 
 # Load the dataset (assuming it's in the same directory)
@@ -331,8 +334,6 @@ def experiment_page():
         st.session_state.start_time = time.time()
     if f'start_time_{st.session_state.current_index}' not in st.session_state:
         st.session_state[f'start_time_{st.session_state.current_index}'] = time.time()
-    if 'experiment_responses' not in st.session_state:
-        st.session_state.experiment_responses = pd.DataFrame()
 
     def adjust_ai_confidence(confidence, condition):
         if condition == "accuracy_low":
