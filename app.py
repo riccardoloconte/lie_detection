@@ -41,7 +41,7 @@ def submit_to_sheet_1(data):
 def submit_to_sheet_2(data):
     participant_data = conn.read(worksheet="Sheet2", usecols=list(range(12)), ttl=5)
     updated_combined_data = pd.concat([participant_data, data], ignore_index=True)
-    conn.update(worksheet="Sheet2", data=updated_combined_data.value.tolist())
+    conn.update(worksheet="Sheet2", data=updated_combined_data.values.tolist())
 
 # Load the dataset (assuming it's in the same directory)
 @st.cache_data(ttl=1800)  # Cache the data for 60 seconds
