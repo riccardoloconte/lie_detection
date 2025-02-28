@@ -13,8 +13,8 @@ from streamlit_gsheets import GSheetsConnection
 
 # Create a connection object
 conn = st.connection("gsheets", type=GSheetsConnection)  
-#experiment_data = conn.read(worksheet="Sheet1", usecols=list(range(13)), ttl=5)
-#participant_data = conn.read(worksheet="Sheet2", usecols=list(range(12)), ttl=5)
+experiment_data = conn.read(worksheet="Sheet1", usecols=list(range(13)), ttl=5)
+participant_data = conn.read(worksheet="Sheet2", usecols=list(range(12)), ttl=5)
 
 if 'experiment_responses' not in st.session_state:
         st.session_state.experiment_responses = pd.DataFrame()
@@ -34,12 +34,12 @@ if 'experiment_responses' not in st.session_state:
     #    st.session_state.batch_data_1 = []  # Clear the batch after submission
 
 def submit_to_sheet_1(data):
-    existing_data = conn.read(worksheet="Sheet1", usecols=list(range(13)), ttl=5)
+    #existing_data = conn.read(worksheet="Sheet1", usecols=list(range(13)), ttl=5)
     combined_data = pd.concat([existing_data, data], ignore_index=True)
     conn.update(worksheet="Sheet1", data=combined_data.values.tolist())
                 
 def submit_to_sheet_2(data):
-    participant_data = conn.read(worksheet="Sheet2", usecols=list(range(12)), ttl=5)
+    #participant_data = conn.read(worksheet="Sheet2", usecols=list(range(12)), ttl=5)
     updated_combined_data = pd.concat([participant_data, data], ignore_index=True)
     conn.update(worksheet="Sheet2", data=updated_combined_data.values.tolist())
 
