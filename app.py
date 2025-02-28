@@ -36,12 +36,12 @@ if 'experiment_responses' not in st.session_state:
 def submit_to_sheet_1(data):
     existing_data = conn.read(worksheet="Sheet1", usecols=list(range(13)), ttl=5)
     combined_data = pd.concat([existing_data, data], ignore_index=True)
-    conn.write(combined_data.values.tolist(), worksheet="Sheet1")
+    conn.update(worksheet="Sheet1", data=combined_data.values.tolist())
                 
 def submit_to_sheet_2(data):
     participant_data = conn.read(worksheet="Sheet2", usecols=list(range(12)), ttl=5)
     updated_combined_data = pd.concat([participant_data, data], ignore_index=True)
-    conn.write(updated_combined_data.value.tolist(), worksheet="Sheet2")
+    conn.update(worksheet="Sheet2", data=updated_combined_data.value.tolist())
 
 # Load the dataset (assuming it's in the same directory)
 @st.cache_data(ttl=1800)  # Cache the data for 60 seconds
