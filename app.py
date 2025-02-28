@@ -232,14 +232,14 @@ def example_page():
     elif st.session_state.example_sub_page == 2:
         st.write(":robot_face: **You will be provided with an algorithmic prediction for that statement.** :arrow_down:")
         
-        st.slider("AI Judgment:", min_value=0, max_value=100, value=75, step=10, disabled=True) 
+        st.slider("AI Judgment:", min_value=-50, max_value=+50, value=35, step=10, disabled=True) 
         st.columns(1)
         display_confidence_labels(labels, style) # Display confidence labels 
         display_truthful_deceptive_labels()  # Display true-false labels 
         
-        st.write("""**Explanations:** This slider shows you that the more the judgment is close to **100**, the more the AI lie-detector is **confident** that the statement is **truthful**.
-            The more the judgment is close to **0**, the more the AI lie-detector is **confident** that the statement is **deceptive**.
-            When the slider is close to the midpoint (i.e., 50) it means that the AI lie-detector doesn't really know whether the statement is truthful or deceptive.""")
+        st.write("""**Explanations:** This slider shows you that the more the judgment is close to **+50**, the more the AI lie-detector is **confident** that the statement is **truthful**.
+            The more the judgment is close to **-50**, the more the AI lie-detector is **confident** that the statement is **deceptive**.
+            When the slider is close to zero it means that the AI lie-detector doesn't really know whether the statement is truthful or deceptive.""")
 
         
     # Sub-page 3: Participant's Turn and Explanation
@@ -248,13 +248,13 @@ def example_page():
         st.write("""Let's have a go and try moving the slider to make YOUR judgment.
                     This is an example, so your choices have no consequences on this page.""")
 
-        st.slider("Your judgment", min_value=0, max_value=100, value=50, step=10, disabled=False)
+        st.slider("Your judgment", min_value=-50, max_value=50, value=0, step=1, disabled=False, on_change=True)
         display_confidence_labels(labels, style) # Display confidence labels 
         display_truthful_deceptive_labels() # Display true-false labels 
 
-        st.write("""**Explanations:** As before, the more your judgment is close to **100**, the more you are **confident** that the statement is **truthful**.
-            The more your judgment is close to **0**, the more you are **confident** that the statement is **deceptive**.
-            When the slider is close to the midpoint (i.e., 50), it means that you don't really know whether the statement is truthful or deceptive.""")
+        st.write("""**Explanations:** As before, the more your judgment is close to **50**, the more you are **confident** that the statement is **truthful**.
+            The more your judgment is close to **-50**, the more you are **confident** that the statement is **deceptive**.
+            When the slider is close to the zero it means that you don't really know whether the statement is truthful or deceptive.""")
  
     # Navigation Buttons
     col1, col2, col3 = st.columns([1.3, 6.4, 1.3])
@@ -279,13 +279,13 @@ def insert_attention_checks(statements):
     # Create attention check statements
     attention_check_1 = pd.DataFrame([{
         'truth-dec_pairID': 'attention_check_1',
-        'text': """This is an attention check and serves to validate your participation. Please put the slider at the position 72. The rest of this statement is just a placeholder.
+        'text': """This is an attention check and serves to validate your participation. Please put the slider at the position -20. The rest of this statement is just a placeholder.
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                 Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
                 Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
                 Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.""",
         'condition': 'attention_check',
-        'confidence': 72
+        'confidence': -20
     }])
     attention_check_2 = pd.DataFrame([{
         'truth-dec_pairID': 'attention_check_2',
@@ -321,16 +321,16 @@ def experiment_page():
     def adjust_ai_confidence(confidence, condition):
         if condition == "accuracy_low":
             if random.random() > 0.54:
-                confidence = 100 - confidence  # Flip the confidence
+                confidence = 50 - confidence  # Flip the confidence
         elif condition == "accuracy_high":
             if random.random() > 0.89:
-                confidence = 100 - confidence  # Flip the confidence
+                confidence = 50 - confidence  # Flip the confidence
         return confidence
 
     def is_prediction_correct(confidence, statement_condition):
-        if statement_condition == "truthful" and confidence >= 50:
+        if statement_condition == "truthful" and confidence >= 0:
             return True
-        elif statement_condition == "deceptive" and confidence < 50:
+        elif statement_condition == "deceptive" and confidence < 0:
             return True
         return False
 
@@ -400,7 +400,7 @@ def experiment_page():
         ai_judgment = st.session_state[f'ai_judgment_{st.session_state.current_index}']
 
     # AI's interactive slider
-    st.slider("AI Judgment:", min_value=0, max_value=100, value=ai_judgment, step=1, disabled=True)
+    st.slider("AI Judgment:", min_value=-50, max_value=+50, value=ai_judgment, step=1, disabled=True)
     display_confidence_labels(labels, style)  # Display confidence labels 
     display_truthful_deceptive_labels() # Display true-false labels 
 
@@ -408,14 +408,15 @@ def experiment_page():
     st.write(":sleuth_or_spy: **Please rate the statement** :arrow_down:")
 
     if participant_judgment_key not in st.session_state:
-        st.session_state[participant_judgment_key] = 50  # Initialize to default
+        st.session_state[participant_judgment_key] = 0  # Initialize to default
 
     participant_judgment = st.slider("Your Judgment:", 
-                                    min_value=0, 
-                                    max_value=100, 
+                                    min_value=-50, 
+                                    max_value=+50, 
                                     value=st.session_state[participant_judgment_key], 
                                     step=1, 
-                                    key=participant_judgment_key)                       
+                                    key=participant_judgment_key,
+                                    on_change=True)                       
     
     display_confidence_labels(labels, style)   # Display confidence labels 
     display_truthful_deceptive_labels() # Display true-false labels
@@ -456,7 +457,8 @@ def experiment_page():
         combined_data = pd.concat([experiment_data, st.session_state.experiment_responses], ignore_index=True)
 
         st.session_state.submitted = True 
-        st.toast("Your judgment has been recorded!")
+        st.success("Your judgment has been recorded!")
+        time.sleep(2)
         update_progress()
 
         # Automatically navigate to the next stimulus or page
@@ -481,7 +483,7 @@ def final_questions():
 
     # AI vs Average Human
     st.write("2. How good do you think the **average human performance** is compared to the performance of the AI-based lie detector in predicting whether a statement is true or false?")
-    st.session_state.algo_vs_avg_human = st.slider("", min_value=0, max_value=10, value=5, step=1)
+    st.session_state.algo_vs_avg_human = st.slider("", min_value=0, max_value=10, value=5, step=1, on_change=True)
     col1, col2, col3, col4, col5, col6 = st.columns([1.5,1,1,1.5,1,1.5])
     with col1:
         st.markdown("<p style='color: grey; font-size: 0.9em;'><strong>Algotithm's performance is better</strong></p>", unsafe_allow_html=True)
@@ -492,7 +494,7 @@ def final_questions():
     
     # AI vs Participant
     st.write("3. How good do you think **your performance** is compared to the performance of the AI-based lie detector in distinguishing truth from lies?")
-    st.session_state.algo_vs_yourself = st.slider(" ", min_value=0, max_value=10, value=5, step=1)
+    st.session_state.algo_vs_yourself = st.slider(" ", min_value=0, max_value=10, value=5, step=1, on_change=True)
     col1, col2, col3, col4, col5, col6 = st.columns([1.5,1,1,1.5,1,1.5])
     with col1:
         st.markdown("<p style='color: grey; font-size: 0.9em;'><strong>Algotithm's performance is better</strong></p>", unsafe_allow_html=True)
@@ -503,7 +505,7 @@ def final_questions():
 
     # Familiarity with ML 
     st.write("4. How familiar are you with AI-based algorithms?")
-    st.session_state.ML_familiarity = st.slider("  ", min_value=0, max_value=10, value = 5, step=1)
+    st.session_state.ML_familiarity = st.slider("  ", min_value=0, max_value=10, value = 5, step=1, on_change=True)
     col1, col2, col3, col4, col5, col6 = st.columns([1.5,1,1,1.5,1,1.5])
     with col1:
         st.markdown("<p style='color: grey; font-size: 0.9em;'><strong>Not familiar at all</strong></p>", unsafe_allow_html=True)
@@ -544,10 +546,10 @@ def feedback_page():
     st.write("Please provide us with feedback about the study. Your feedback is valuable to us and will help us improve our study.")
     
     st.write("**1. How much were you motivated to perform well?**")
-    st.session_state.motivation_scale = st.slider("0 = Not at all, 10 = Very much", min_value=0, max_value=10, value=5, step=1)
+    st.session_state.motivation_scale = st.slider("0 = Not at all, 10 = Very much", min_value=0, max_value=10, value=5, step=1, on_change=True)
 
     st.write("**2. How difficult did you find the study?**")
-    st.session_state.difficulty_scale = st.slider("0 = Very easy, 10 = Very difficult", min_value=0, max_value=10, value=5, step=1)
+    st.session_state.difficulty_scale = st.slider("0 = Very easy, 10 = Very difficult", min_value=0, max_value=10, value=5, step=1, on_change=True)
     
     st.write("**3. You can leave here any comment about this experiment (Optional).**")
     st.session_state.feedback = st.text_area("Feedback")
