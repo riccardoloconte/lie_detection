@@ -36,7 +36,9 @@ def submit_to_sheet_1(data):
     conn.write(combined_data.values.tolist(), worksheet="Sheet1")
                 
 def submit_to_sheet_2(data):
-    conn.update(worksheet="Sheet2",data=data.values.tolist())
+    participant_data = conn.read(worksheet="Sheet2", usecols=list(range(12)), ttl=5)
+    updated_combined_data = pd.concat([participant_data, combined_data], ignore_index=True)
+    conn.write(updated_combined_data.value.tolist(), worksheet="Sheet2")
 
 # Load the dataset (assuming it's in the same directory)
 @st.cache_data(ttl=1800)  # Cache the data for 60 seconds
@@ -597,8 +599,7 @@ def feedback_page():
         
         # Concatenate all data into a single list
         combined_data = pd.concat([questions_data,feedback_data], axis=1)
-        updated_combined_data = pd.concat([participant_data, combined_data], ignore_index=True)
-        submit_to_sheet_2(updated_combined_data)
+        submit_to_sheet_2(combined_data)
         
         st.write("Thank you for your feedback.")
         st.session_state.page = 'end'
