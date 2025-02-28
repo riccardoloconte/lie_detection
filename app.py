@@ -33,15 +33,15 @@ if 'experiment_responses' not in st.session_state:
     #    conn.update(worksheet="Sheet1", data=flat_data)
     #    st.session_state.batch_data_1 = []  # Clear the batch after submission
 
-def submit_to_sheet_1(data):
-    #existing_data = conn.read(worksheet="Sheet1", usecols=list(range(13)), ttl=5)
-    combined_data = pd.concat([existing_data, data], ignore_index=True)
-    conn.update(worksheet="Sheet1", data=combined_data.values.tolist())
+#def submit_to_sheet_1(data):
+#    #existing_data = conn.read(worksheet="Sheet1", usecols=list(range(13)), ttl=5)
+#    combined_data = pd.concat([existing_data, data], ignore_index=True)
+#    conn.update(worksheet="Sheet1", data=combined_data.values.tolist())
                 
-def submit_to_sheet_2(data):
-    #participant_data = conn.read(worksheet="Sheet2", usecols=list(range(12)), ttl=5)
-    updated_combined_data = pd.concat([participant_data, data], ignore_index=True)
-    conn.update(worksheet="Sheet2", data=updated_combined_data.values.tolist())
+#def submit_to_sheet_2(data):
+#    #participant_data = conn.read(worksheet="Sheet2", usecols=list(range(12)), ttl=5)
+#    updated_combined_data = pd.concat([participant_data, data], ignore_index=True)
+#    conn.update(worksheet="Sheet2", data=updated_combined_data.values.tolist())
 
 # Load the dataset (assuming it's in the same directory)
 @st.cache_data(ttl=1800)  # Cache the data for 60 seconds
@@ -470,33 +470,21 @@ def experiment_page():
 
         # Append response data to experiment_data in session state
         st.session_state.experiment_responses = pd.concat([st.session_state.experiment_responses, response_data], ignore_index=True)
+        combined_data = pd.concat([experiment_data, st.session_state.experiment_responses], ignore_index=True)
 
         st.session_state.submitted = True 
         st.success("Your judgment has been recorded!")
         update_progress()
-        
-    # Navigation Buttons
-    col1, col2, col3 = st.columns([1.3, 6.7, 1])
 
-    with col1:
-        if st.button("Previous", disabled=(st.session_state.current_index == 0)):
-            scroll_to_top()
-            st.session_state.current_index -= 1
-            st.session_state.submitted = False  # Reset submission status
-            st.rerun() 
-
-    with col3:
-        if st.button("Next", disabled=not st.session_state.submitted):
-            # Only allow moving forward if the participant has submitted their judgment
-            if st.session_state.current_index < len(st.session_state.statements) - 1:
-                scroll_to_top()
-                st.session_state.current_index += 1
-                st.session_state.submitted = False  # Reset submission status for the next statement
-                st.rerun()  
-            else:
-                submit_to_sheet_1(st.session_state.experiment_responses)
-                st.session_state.page = 'final_questions'
-                st.rerun()
+        # Automatically navigate to the next stimulus or page
+        if st.session_state.current_index < len(st.session_state.statements) - 1:
+            st.session_state.current_index += 1
+            st.session_state.submitted = False  # Reset submission status for the next statement
+            st.rerun()  
+        else:
+            conn.update(worksheet="Sheet1", data=combined_data)
+            st.session_state.page = 'final_questions'
+            st.rerun()
 
 def final_questions():
     scroll_to_top()
@@ -600,7 +588,8 @@ def feedback_page():
         
         # Concatenate all data into a single list
         combined_data = pd.concat([questions_data,feedback_data], axis=1)
-        submit_to_sheet_2(combined_data)
+        updated_df = pd.concat([participant_data, combined_data], ignore_index=True)
+        conn.update(worksheet="Sheet2", data=updated_df)
         
         st.write("Thank you for your feedback.")
         st.session_state.page = 'end'
