@@ -120,35 +120,18 @@ labels = ["Very confident",
 style = "font-size: 12px; text-align: center;"
 
 def display_confidence_labels(labels, style):
-    #col1, col2, col3, col4, col5, col6, col7, col8, col9 = st.columns([1.25, 1.25, 1.25, 1.25, 1, 1.25, 1.25, 1.25, 1.25])
     col1, col2, col3, col4, col5, col6, col7, col8, col9 = st.columns([1, 1, 1, 1, 1.5, 1, 1, 1, 1])
-    with col1:
-        st.markdown(f"<div style='{style} color: darkgreen; font-weight: bold'>{labels[0]}</div>", unsafe_allow_html=True)
-    with col2:
-        st.markdown(f"<div style='{style} color: green'>{labels[1]}</div>", unsafe_allow_html=True)
-    with col3:
-        st.markdown(f"<div style='{style} color: orange'>{labels[2]}</div>", unsafe_allow_html=True)
-    with col4:
-        st.markdown(f"<div style='{style} color: red'>{labels[3]}</div>", unsafe_allow_html=True)
-    with col5:
-        st.markdown(f"<div style='{style} color: grey'>{labels[4]}</div>", unsafe_allow_html=True)
-    with col6:
-        st.markdown(f"<div style='{style} color: red'>{labels[5]}</div>", unsafe_allow_html=True)
-    with col7:
-        st.markdown(f"<div style='{style} color: orange'>{labels[6]}</div>", unsafe_allow_html=True)
-    with col8:
-        st.markdown(f"<div style='{style} color: green'>{labels[7]}</div>", unsafe_allow_html=True)
-    with col9:
-        st.markdown(f"<div style='{style} color: darkgreen; font-weight: bold'>{labels[8]}</div>", unsafe_allow_html=True)
-
+    for col, label in zip([col1, col2, col3, col4, col5, col6, col7, col8, col9], labels):
+            col.markdown(f"<div style='{style} color: grey'>{label}</div>", unsafe_allow_html=True)
+       
 # Define now the elements to display Truthful-Deceptive labels later on (this will avoid repetitions later on):
 def display_truthful_deceptive_labels():
     space = st.columns(1)
     col1, col2, col3 = st.columns([1, 6, 1])
     with col1:
-        st.markdown("<p style='color: grey; font-size: 0.9em;'><strong>Completely<br>deceptive</strong></p>", unsafe_allow_html=True)
+        st.markdown("<p style='color: grey; font-size: 0.9em;'><strong>Deceptive</strong></p>", unsafe_allow_html=True)
     with col3:
-        st.markdown("<p style='text-align: right; color: grey; font-size: 0.9em;'><strong>Completely<br>truthful</strong></p>", unsafe_allow_html=True)
+        st.markdown("<p style='text-align: right; color: grey; font-size: 0.9em;'><strong>Truthful</strong></p>", unsafe_allow_html=True)
 
 ####################################################################################################################
 
@@ -473,7 +456,7 @@ def experiment_page():
         combined_data = pd.concat([experiment_data, st.session_state.experiment_responses], ignore_index=True)
 
         st.session_state.submitted = True 
-        st.success("Your judgment has been recorded!")
+        st.toast("Your judgment has been recorded!")
         update_progress()
 
         # Automatically navigate to the next stimulus or page
