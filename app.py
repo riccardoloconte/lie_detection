@@ -247,11 +247,11 @@ def example_page():
         st.write("""Let's have a go and try moving the slider to make YOUR judgment.
                     This is an example, so your choices have no consequences on this page.""")
 
-        st.slider("Your judgment", min_value=-50, max_value=50, value=0, step=1, disabled=False)
+        st.slider("Your judgment", min_value=-50, max_value=+50, value=0, step=1, disabled=False)
         display_confidence_labels(labels, style) # Display confidence labels 
         display_truthful_deceptive_labels() # Display true-false labels 
 
-        st.write("""**Explanations:** As before, the more your judgment is close to **50**, the more you are **confident** that the statement is **truthful**.
+        st.write("""**Explanations:** As before, the more your judgment is close to **+50**, the more you are **confident** that the statement is **truthful**.
             The more your judgment is close to **-50**, the more you are **confident** that the statement is **deceptive**.
             When the slider is close to the zero it means that you don't really know whether the statement is truthful or deceptive.""")
  
