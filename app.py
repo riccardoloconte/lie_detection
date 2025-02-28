@@ -247,7 +247,7 @@ def example_page():
         st.write("""Let's have a go and try moving the slider to make YOUR judgment.
                     This is an example, so your choices have no consequences on this page.""")
 
-        st.slider("Your judgment", min_value=-50, max_value=50, value=0, step=1, disabled=False, on_change=True)
+        st.slider("Your judgment", min_value=-50, max_value=50, value=0, step=1, disabled=False)
         display_confidence_labels(labels, style) # Display confidence labels 
         display_truthful_deceptive_labels() # Display true-false labels 
 
@@ -316,6 +316,8 @@ def experiment_page():
         st.session_state.start_time = time.time()
     if f'start_time_{st.session_state.current_index}' not in st.session_state:
         st.session_state[f'start_time_{st.session_state.current_index}'] = time.time()
+    if 'slider_moved' not in st.session_state:
+        st.session_state.slider_moved = False
 
     def adjust_ai_confidence(confidence, condition):
         if condition == "accuracy_low":
@@ -406,6 +408,9 @@ def experiment_page():
     # Participant's interactive slider
     st.write(":sleuth_or_spy: **Please rate the statement** :arrow_down:")
 
+    def slider_callback():
+        st.session_state.slider_moved = True
+
     if participant_judgment_key not in st.session_state:
         st.session_state[participant_judgment_key] = 0  # Initialize to default
 
@@ -415,12 +420,15 @@ def experiment_page():
                                     value=st.session_state[participant_judgment_key], 
                                     step=1, 
                                     key=participant_judgment_key,
-                                    on_change=True)                       
+                                    on_change=slider_callback)                       
     
     display_confidence_labels(labels, style)   # Display confidence labels 
     display_truthful_deceptive_labels() # Display true-false labels
 
-
+    # Show warning if the slider hasn't been moved
+    if not st.session_state.slider_moved:
+        st.warning("Please move the slider!", icon="⚠️")
+            
     # Submit Button Logic
     if st.button("Submit"):
 
@@ -482,7 +490,7 @@ def final_questions():
 
     # AI vs Average Human
     st.write("2. How good do you think the **average human performance** is compared to the performance of the AI-based lie detector in predicting whether a statement is true or false?")
-    st.session_state.algo_vs_avg_human = st.slider("", min_value=0, max_value=10, value=5, step=1, on_change=True)
+    st.session_state.algo_vs_avg_human = st.slider("", min_value=0, max_value=10, value=5, step=1)
     col1, col2, col3, col4, col5, col6 = st.columns([1.5,1,1,1.5,1,1.5])
     with col1:
         st.markdown("<p style='color: grey; font-size: 0.9em;'><strong>Algotithm's performance is better</strong></p>", unsafe_allow_html=True)
@@ -493,7 +501,7 @@ def final_questions():
     
     # AI vs Participant
     st.write("3. How good do you think **your performance** is compared to the performance of the AI-based lie detector in distinguishing truth from lies?")
-    st.session_state.algo_vs_yourself = st.slider(" ", min_value=0, max_value=10, value=5, step=1, on_change=True)
+    st.session_state.algo_vs_yourself = st.slider(" ", min_value=0, max_value=10, value=5, step=1)
     col1, col2, col3, col4, col5, col6 = st.columns([1.5,1,1,1.5,1,1.5])
     with col1:
         st.markdown("<p style='color: grey; font-size: 0.9em;'><strong>Algotithm's performance is better</strong></p>", unsafe_allow_html=True)
@@ -504,7 +512,7 @@ def final_questions():
 
     # Familiarity with ML 
     st.write("4. How familiar are you with AI-based algorithms?")
-    st.session_state.ML_familiarity = st.slider("  ", min_value=0, max_value=10, value = 5, step=1, on_change=True)
+    st.session_state.ML_familiarity = st.slider("  ", min_value=0, max_value=10, value = 5, step=1)
     col1, col2, col3, col4, col5, col6 = st.columns([1.5,1,1,1.5,1,1.5])
     with col1:
         st.markdown("<p style='color: grey; font-size: 0.9em;'><strong>Not familiar at all</strong></p>", unsafe_allow_html=True)
@@ -545,10 +553,10 @@ def feedback_page():
     st.write("Please provide us with feedback about the study. Your feedback is valuable to us and will help us improve our study.")
     
     st.write("**1. How much were you motivated to perform well?**")
-    st.session_state.motivation_scale = st.slider("0 = Not at all, 10 = Very much", min_value=0, max_value=10, value=5, step=1, on_change=True)
+    st.session_state.motivation_scale = st.slider("0 = Not at all, 10 = Very much", min_value=0, max_value=10, value=5, step=1)
 
     st.write("**2. How difficult did you find the study?**")
-    st.session_state.difficulty_scale = st.slider("0 = Very easy, 10 = Very difficult", min_value=0, max_value=10, value=5, step=1, on_change=True)
+    st.session_state.difficulty_scale = st.slider("0 = Very easy, 10 = Very difficult", min_value=0, max_value=10, value=5, step=1)
     
     st.write("**3. You can leave here any comment about this experiment (Optional).**")
     st.session_state.feedback = st.text_area("Feedback")
