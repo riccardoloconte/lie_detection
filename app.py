@@ -459,7 +459,9 @@ def experiment_page():
 def final_questions():
     scroll_to_top()
     show_progress_bar()
-
+        
+    if 'attention_check_accuracy_selected' not in st.session_state:
+        st.session_state.attention_check_accuracy_selected = False
     if 'algo_vs_avg_human_slider_moved' not in st.session_state:
         st.session_state.algo_vs_avg_human_slider_moved = False
     if 'algo_vs_yourself_slider_moved' not in st.session_state:
@@ -469,13 +471,15 @@ def final_questions():
     
     def slider_callback(slider_name):
         st.session_state[slider_name] = True
+    def radio_callback():
+    st.session_state.attention_check_accuracy_selected = True
 
     st.title("Final questions")
     st.write("Please reply to the following questions.")
 
     # Attention check for the Accuracy condition 
     st.write("1. In this experiment you were shown truthful or deceptive sentences accompanied by the prediction of an AI model. Do you remember how accurate this model was?")
-    st.session_state.attention_check_accuracy = st.radio(" ", ["I don't remember", "28%", "54%", "77%", "89%", "93%"])
+    st.session_state.attention_check_accuracy = st.radio(" ", ["I don't remember", "28%", "54%", "77%", "89%", "93%"], on_change=slider_callback, args=("attention_check_accuracy_selected",))
 
     # AI vs Average Human
     st.write("2. How good do you think the **average human performance** is compared to the performance of the AI-based lie detector in predicting whether a statement is true or false?")
@@ -512,7 +516,9 @@ def final_questions():
 
     if st.button("Next"):
         # Check if all required fields are filled and sliders have been moved
-        if not st.session_state.algo_vs_avg_human_slider_moved:
+        if not st.session_state.attention_check_accuracy_selected:
+            st.warning("Please select an option for question 1 before proceeding.", icon="⚠️")
+        elif not st.session_state.algo_vs_avg_human_slider_moved:
             st.warning("Please move the slider to reply question 2 before proceeding.", icon="⚠️")
         elif not st.session_state.algo_vs_yourself_slider_moved:
             st.warning("Please move the slider to reply question 3 before proceeding.", icon="⚠️")
