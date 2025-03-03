@@ -483,6 +483,17 @@ def experiment_page():
 def final_questions():
     scroll_to_top()
     show_progress_bar()
+
+    if 'algo_vs_avg_human_slider_moved' not in st.session_state:
+        st.session_state.slider_moved = False
+    if 'algo_vs_yourself_slider_moved' not in st.session_state:
+        st.session_state.slider_moved = False
+    if 'ML_familiarity_slider_moved' not in st.session_state:
+        st.session_state.slider_moved = False    
+    
+    def slider_callback(slider_name):
+        st.session_state[slider_name] = True
+
     st.title("Final questions")
     st.write("Please reply to the following questions.")
 
@@ -492,7 +503,7 @@ def final_questions():
 
     # AI vs Average Human
     st.write("2. How good do you think the **average human performance** is compared to the performance of the AI-based lie detector in predicting whether a statement is true or false?")
-    st.session_state.algo_vs_avg_human = st.slider("", min_value=0, max_value=10, value=5, step=1)
+    st.session_state.algo_vs_avg_human = st.slider("", min_value=0, max_value=10, value=5, step=1, on_change=slider_callback, args=("algo_vs_avg_human_slider_moved",))
     col1, col2, col3, col4, col5, col6 = st.columns([1.5,1,1,1.5,1,1.5])
     with col1:
         st.markdown("<p style='color: grey; font-size: 0.9em;'><strong>Algotithm's performance is better</strong></p>", unsafe_allow_html=True)
@@ -503,7 +514,7 @@ def final_questions():
     
     # AI vs Participant
     st.write("3. How good do you think **your performance** is compared to the performance of the AI-based lie detector in distinguishing truth from lies?")
-    st.session_state.algo_vs_yourself = st.slider(" ", min_value=0, max_value=10, value=5, step=1)
+    st.session_state.algo_vs_yourself = st.slider(" ", min_value=0, max_value=10, value=5, step=1, on_change=slider_callback, args=("algo_vs_yourself_slider_moved",))
     col1, col2, col3, col4, col5, col6 = st.columns([1.5,1,1,1.5,1,1.5])
     with col1:
         st.markdown("<p style='color: grey; font-size: 0.9em;'><strong>Algotithm's performance is better</strong></p>", unsafe_allow_html=True)
@@ -514,7 +525,7 @@ def final_questions():
 
     # Familiarity with ML 
     st.write("4. How familiar are you with AI-based algorithms?")
-    st.session_state.ML_familiarity = st.slider("  ", min_value=0, max_value=10, value = 5, step=1)
+    st.session_state.ML_familiarity = st.slider("  ", min_value=0, max_value=10, value = 5, step=1, on_change=slider_callback, args=("ML_familiarity_slider_moved",))
     col1, col2, col3, col4, col5, col6 = st.columns([1.5,1,1,1.5,1,1.5])
     with col1:
         st.markdown("<p style='color: grey; font-size: 0.9em;'><strong>Not familiar at all</strong></p>", unsafe_allow_html=True)
@@ -524,32 +535,36 @@ def final_questions():
         st.markdown("<p style='text-align: right; color: grey; font-size: 0.9em;'><strong>Very familiar</strong></p>", unsafe_allow_html=True)
 
     if st.button("Next"):
-        # Check if all required fields are filled
-        if not st.session_state.attention_check_accuracy or st.session_state.algo_vs_avg_human is None or st.session_state.algo_vs_yourself is None or st.session_state.ML_familiarity is None:
-            st.warning("Please answer all the questions before proceeding.", icon="⚠️")
+        # Check if all required fields are filled and sliders have been moved
+        if not st.session_state.algo_vs_avg_human_slider_moved:
+            st.warning("Please move the slider to reply question 2 before proceeding.", icon="⚠️")
+        elif not st.session_state.algo_vs_yourself_slider_moved:
+            st.warning("Please move the slider to reply question 3 before proceeding.", icon="⚠️")
+        elif not st.session_state.ML_familiarity_slider_moved:
+            st.warning("Please move the slider to reply question 4 before proceeding.", icon="⚠️")
         else:
-                update_progress()
-                current_date = datetime.datetime.now().strftime("%Y-%m-%d")
-                questions_data = pd.DataFrame(
-                   [
-                        {
-                          'date': current_date,
-                          'accuracy_condition': st.session_state.accuracy_condition,
-                          'prolific_id': st.session_state.prolific_id,
-                          'participant_id': st.session_state.participant_id,
-                          'consent': st.session_state.consent_data,
-                          'attention_check_accuracy': st.session_state.attention_check_accuracy,
-                          'algo_vs_avg_human': st.session_state.algo_vs_avg_human,
-                          'algo_vs_yourself': st.session_state.algo_vs_yourself,
-                          'ML_familiarity': st.session_state.ML_familiarity
-                        }
-                    ]
-                )
+            update_progress()
+            current_date = datetime.datetime.now().strftime("%Y-%m-%d")
+            questions_data = pd.DataFrame(
+                [
+                    {
+                        'date': current_date,
+                        'accuracy_condition': st.session_state.accuracy_condition,
+                        'prolific_id': st.session_state.prolific_id,
+                        'participant_id': st.session_state.participant_id,
+                        'consent': st.session_state.consent_data,
+                        'attention_check_accuracy': st.session_state.attention_check_accuracy,
+                        'algo_vs_avg_human': st.session_state.algo_vs_avg_human,
+                        'algo_vs_yourself': st.session_state.algo_vs_yourself,
+                        'ML_familiarity': st.session_state.ML_familiarity
+                    }
+                ]
+            )
         
-                # Store response_data in session state
-                st.session_state.questions_data = questions_data
-                st.session_state.page = 'feedback'
-                st.rerun()
+            # Store response_data in session state
+            st.session_state.questions_data = questions_data
+            st.session_state.page = 'feedback'
+            st.rerun()
 
 def feedback_page():
     scroll_to_top()
