@@ -524,28 +524,32 @@ def final_questions():
         st.markdown("<p style='text-align: right; color: grey; font-size: 0.9em;'><strong>Very familiar</strong></p>", unsafe_allow_html=True)
 
     if st.button("Next"):
-        update_progress()
-        current_date = datetime.datetime.now().strftime("%Y-%m-%d")
-        questions_data = pd.DataFrame(
-        [
-         {
-                'date': current_date,
-                'accuracy_condition': st.session_state.accuracy_condition,
-                'prolific_id': st.session_state.prolific_id,
-                'participant_id': st.session_state.participant_id,
-                'consent': st.session_state.consent_data,
-                'attention_check_accuracy': st.session_state.attention_check_accuracy,
-                'algo_vs_avg_human': st.session_state.algo_vs_avg_human,
-                'algo_vs_yourself': st.session_state.algo_vs_yourself,
-                'ML_familiarity': st.session_state.ML_familiarity
-          }
-         ]
-        )
+        # Check if all required fields are filled
+        if not st.session_state.attention_check_accuracy or st.session_state.algo_vs_avg_human is None or st.session_state.algo_vs_yourself is None or st.session_state.ML_familiarity is None:
+            st.warning("Please answer all the questions before proceeding.", icon="⚠️")
+        else:
+                update_progress()
+                current_date = datetime.datetime.now().strftime("%Y-%m-%d")
+                questions_data = pd.DataFrame(
+                   [
+                        {
+                          'date': current_date,
+                          'accuracy_condition': st.session_state.accuracy_condition,
+                          'prolific_id': st.session_state.prolific_id,
+                          'participant_id': st.session_state.participant_id,
+                          'consent': st.session_state.consent_data,
+                          'attention_check_accuracy': st.session_state.attention_check_accuracy,
+                          'algo_vs_avg_human': st.session_state.algo_vs_avg_human,
+                          'algo_vs_yourself': st.session_state.algo_vs_yourself,
+                          'ML_familiarity': st.session_state.ML_familiarity
+                  }
+                 ]
+                )
         
-        # Store response_data in session state
-        st.session_state.questions_data = questions_data
-        st.session_state.page = 'feedback'
-        st.rerun()
+                # Store response_data in session state
+                st.session_state.questions_data = questions_data
+                st.session_state.page = 'feedback'
+                st.rerun()
 
 def feedback_page():
     scroll_to_top()
@@ -566,28 +570,30 @@ def feedback_page():
     st.write("Please click on the button below to submit your feedback.")
     
     if st.button("Submit Feedback"): 
+        if not st.session_state.motivation_scale or st.session_state.difficulty_scale is None:
+            st.warning("Please answer all the questions before proceeding.", icon="⚠️")
         update_progress()
-        feedback_data = pd.DataFrame(
-        [
-         {
-                "motivation": st.session_state.motivation_scale,
-                "difficulty": st.session_state.difficulty_scale,
-                "feedback": st.session_state.feedback
-         }
-        ]
-       )
+                feedback_data = pd.DataFrame(
+                 [
+                  {
+                        "motivation": st.session_state.motivation_scale,
+                        "difficulty": st.session_state.difficulty_scale,
+                        "feedback": st.session_state.feedback
+                 }
+                ]
+               )
         
-        # Retrieve response_data and questions_data from session state
-        questions_data = st.session_state.questions_data
+                # Retrieve response_data and questions_data from session state
+                questions_data = st.session_state.questions_data
         
-        # Concatenate all data into a single list
-        combined_data = pd.concat([questions_data,feedback_data], axis=1)
-        updated_df = pd.concat([participant_data, combined_data], ignore_index=True)
-        conn.update(worksheet="Sheet2", data=updated_df)
+                # Concatenate all data into a single list
+                combined_data = pd.concat([questions_data,feedback_data], axis=1)
+                updated_df = pd.concat([participant_data, combined_data], ignore_index=True)
+                conn.update(worksheet="Sheet2", data=updated_df)
         
-        st.write("Thank you for your feedback.")
-        st.session_state.page = 'end'
-        st.rerun()
+                st.write("Thank you for your feedback.")
+                st.session_state.page = 'end'
+                st.rerun()
                  
 def end_page():
     update_progress()
