@@ -471,8 +471,6 @@ def final_questions():
     
     def slider_callback(slider_name):
         st.session_state[slider_name] = True
-    def radio_callback():
-    st.session_state.attention_check_accuracy_selected = True
 
     st.title("Final questions")
     st.write("Please reply to the following questions.")
