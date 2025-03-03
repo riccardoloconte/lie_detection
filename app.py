@@ -322,10 +322,10 @@ def experiment_page():
     def adjust_ai_confidence(confidence, condition):
         if condition == "accuracy_low":
             if random.random() > 0.54:
-                confidence = 50 - confidence  # Flip the confidence
+                confidence = -confidence  # Flip the confidence
         elif condition == "accuracy_high":
             if random.random() > 0.89:
-                confidence = 50 - confidence  # Flip the confidence
+                confidence = -confidence  # Flip the confidence
         return confidence
 
     def is_prediction_correct(confidence, statement_condition):
