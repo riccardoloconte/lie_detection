@@ -572,28 +572,29 @@ def feedback_page():
     if st.button("Submit Feedback"): 
         if not st.session_state.motivation_scale or st.session_state.difficulty_scale is None:
             st.warning("Please answer all the questions before proceeding.", icon="⚠️")
-        update_progress()
-                feedback_data = pd.DataFrame(
-                 [
-                  {
-                        "motivation": st.session_state.motivation_scale,
-                        "difficulty": st.session_state.difficulty_scale,
-                        "feedback": st.session_state.feedback
-                 }
-                ]
-               )
+        else:
+                update_progress()
+                        feedback_data = pd.DataFrame(
+                         [
+                          {
+                                "motivation": st.session_state.motivation_scale,
+                                "difficulty": st.session_state.difficulty_scale,
+                                "feedback": st.session_state.feedback
+                         }
+                        ]
+                       )
         
-                # Retrieve response_data and questions_data from session state
-                questions_data = st.session_state.questions_data
+                        # Retrieve response_data and questions_data from session state
+                        questions_data = st.session_state.questions_data
         
-                # Concatenate all data into a single list
-                combined_data = pd.concat([questions_data,feedback_data], axis=1)
-                updated_df = pd.concat([participant_data, combined_data], ignore_index=True)
-                conn.update(worksheet="Sheet2", data=updated_df)
+                        # Concatenate all data into a single list
+                        combined_data = pd.concat([questions_data,feedback_data], axis=1)
+                        updated_df = pd.concat([participant_data, combined_data], ignore_index=True)
+                        conn.update(worksheet="Sheet2", data=updated_df)
         
-                st.write("Thank you for your feedback.")
-                st.session_state.page = 'end'
-                st.rerun()
+                        st.write("Thank you for your feedback.")
+                        st.session_state.page = 'end'
+                        st.rerun()
                  
 def end_page():
     update_progress()
