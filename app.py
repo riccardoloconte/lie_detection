@@ -19,30 +19,6 @@ participant_data = conn.read(worksheet="Sheet2", usecols=list(range(12)), ttl=5)
 if 'experiment_responses' not in st.session_state:
         st.session_state.experiment_responses = pd.DataFrame()
 
-# Function to submit data to Google Sheets
-# Initialize a list to accumulate data
-#def submit_to_sheet_1(data):
-    # Accumulate data in the session state
-    #if 'batch_data_1' not in st.session_state:
-    #    st.session_state.batch_data_1 = []
-    #st.session_state.batch_data_1.append(data)
-    
-    # Check if the batch size is reached
-    #if len(st.session_state.batch_data_1) == 12:  # Adjust the batch size as needed
-    #    flat_data = [[item if not isinstance(item, list) else item[0] for item in row] for row in st.session_state.batch_data_1]
-    #    conn.update(worksheet="Sheet1", data=flat_data)
-    #    st.session_state.batch_data_1 = []  # Clear the batch after submission
-
-#def submit_to_sheet_1(data):
-#    #existing_data = conn.read(worksheet="Sheet1", usecols=list(range(13)), ttl=5)
-#    combined_data = pd.concat([existing_data, data], ignore_index=True)
-#    conn.update(worksheet="Sheet1", data=combined_data.values.tolist())
-                
-#def submit_to_sheet_2(data):
-#    #participant_data = conn.read(worksheet="Sheet2", usecols=list(range(12)), ttl=5)
-#    updated_combined_data = pd.concat([participant_data, data], ignore_index=True)
-#    conn.update(worksheet="Sheet2", data=updated_combined_data.values.tolist())
-
 # Load the dataset (assuming it's in the same directory)
 @st.cache_data(ttl=1800)  # Cache the data for 60 seconds
 def load_statements():
@@ -485,11 +461,11 @@ def final_questions():
     show_progress_bar()
 
     if 'algo_vs_avg_human_slider_moved' not in st.session_state:
-        st.session_state.slider_moved = False
+        st.session_state.algo_vs_avg_human_slider_moved = False
     if 'algo_vs_yourself_slider_moved' not in st.session_state:
-        st.session_state.slider_moved = False
+        st.session_state.algo_vs_yourself_slider_moved = False
     if 'ML_familiarity_slider_moved' not in st.session_state:
-        st.session_state.slider_moved = False    
+        st.session_state.ML_familiarity_slider_moved = False    
     
     def slider_callback(slider_name):
         st.session_state[slider_name] = True
