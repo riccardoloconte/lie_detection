@@ -549,15 +549,23 @@ def final_questions():
 def feedback_page():
     scroll_to_top()
     show_progress_bar()
-    
+
+    if 'motivation_check' not in st.session_state:
+        st.session_state.motivation_check = False
+    if 'difficulty_check' not in st.session_state:
+        st.session_state.difficulty_check = False    
+
+    def slider_callback(slider_name):
+        st.session_state[slider_name] = True
+            
     st.title("Feedback")
     st.write("Please provide us with feedback about the study. Your feedback is valuable to us and will help us improve our study.")
     
     st.write("**1. How much were you motivated to perform well?**")
-    st.session_state.motivation_scale = st.slider("0 = Not at all, 10 = Very much", min_value=0, max_value=10, value=5, step=1)
+    st.session_state.motivation_scale = st.slider("0 = Not at all, 10 = Very much", min_value=0, max_value=10, value=5, step=1, on_change=slider_callback, args=("motivation_check",))
 
     st.write("**2. How difficult did you find the study?**")
-    st.session_state.difficulty_scale = st.slider("0 = Very easy, 10 = Very difficult", min_value=0, max_value=10, value=5, step=1)
+    st.session_state.difficulty_scale = st.slider("0 = Very easy, 10 = Very difficult", min_value=0, max_value=10, value=5, step=1, on_change=slider_callback, args=("difficulty_check",))
     
     st.write("**3. You can leave here any comment about this experiment (Optional).**")
     st.session_state.feedback = st.text_area("Feedback")
@@ -565,8 +573,10 @@ def feedback_page():
     st.write("Please click on the button below to submit your feedback.")
     
     if st.button("Submit Feedback"): 
-        if not st.session_state.motivation_scale or st.session_state.difficulty_scale is None:
-            st.warning("Please answer all the questions before proceeding.", icon="⚠️")
+        if not st.session_state.motivation_check:
+            st.warning("Please move the slider to reply question 1 before proceeding.", icon="⚠️")
+        elif not st.session_state.difficulty_check:
+            st.warning("Please move the slider to reply question 2 before proceeding.", icon="⚠️")
         else:
                 update_progress()
                 feedback_data = pd.DataFrame(
