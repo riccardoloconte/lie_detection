@@ -270,9 +270,10 @@ def example_page():
 def insert_attention_checks(statements):
     # Create attention check statements
     attention_check_1 = pd.DataFrame([{
-        'truth-dec_pairID': 'attention_check_1',
-        'text': """This is an attention check and serves to validate your participation. Please put the slider at the position -20. The rest of this statement is just a placeholder.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        'author_id': 'attention_check_1',
+        'event': 'Attention check',    
+        'context': "This is an attention check and serves to validate your participation. Please put the slider at the position -20. The rest of this statement is just a placeholder.",    
+        'text': """ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                 Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
                 Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
                 Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.""",
@@ -280,9 +281,10 @@ def insert_attention_checks(statements):
         'confidence': -20
     }])
     attention_check_2 = pd.DataFrame([{
-        'truth-dec_pairID': 'attention_check_2',
-        'text': """This is an attention check and serves to validate your participation. Please put the slider at the position 33. The rest of this statement is just a placeholder.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        'author_id': 'attention_check_2',
+        'event': 'Attention check',    
+        'context': "This is an attention check and serves to validate your participation. Please put the slider at the position 33. The rest of this statement is just a placeholder.",    
+        'text': """Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                 Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
                 Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
                 Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.""",
