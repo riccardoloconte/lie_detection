@@ -378,6 +378,8 @@ def experiment_page():
     # Display the statement
     st.write("Please read the following statement carefully:")
     st.write(f"**Statement {statement_number}**: \n{st.session_state.statement_text}")
+    st.write("") # Create more space 
+    st.write("") # Create more space   
 
     # Initialize trial-specific keys
     participant_judgment_key = f'participant_judgment_{st.session_state.current_index}'
@@ -399,6 +401,7 @@ def experiment_page():
     display_truthful_deceptive_labels() # Display true-false labels 
 
     # Participant's interactive slider
+    st.write("") # Create more space 
     st.write("") # Create more space 
     st.write(":sleuth_or_spy: **Please rate the statement** :arrow_down:")
 
