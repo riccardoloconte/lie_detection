@@ -272,7 +272,7 @@ def insert_attention_checks(statements):
     attention_check_1 = pd.DataFrame([{
         'author_id': 'attention_check_1',
         'event': 'Attention check',    
-        'context': "This is an attention check and serves to validate your participation. Please put the slider at the position -20. The rest of this statement is just a placeholder.",    
+        'reason_for_lying': "This is an attention check and serves to validate your participation. Please put the slider at the position -20. The rest of this statement is just a placeholder.",    
         'text': """ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                 Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
                 Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
@@ -283,7 +283,7 @@ def insert_attention_checks(statements):
     attention_check_2 = pd.DataFrame([{
         'author_id': 'attention_check_2',
         'event': 'Attention check',    
-        'context': "This is an attention check and serves to validate your participation. Please put the slider at the position 33. The rest of this statement is just a placeholder.",    
+        'reason_for_lying': "This is an attention check and serves to validate your participation. Please put the slider at the position 33. The rest of this statement is just a placeholder.",    
         'text': """Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                 Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
                 Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
@@ -382,7 +382,7 @@ def experiment_page():
     # Display the statement
     st.write("Please read the following statement carefully:")
     st.write(f"**Topic:** {st.session_state.event}")
-    st.write(f"**Context:** The author of the statement might have lied {st.session_state.context}")    
+    st.write(f"**Context:** {st.session_state.context}")    
     st.write(f"**Statement {statement_number}**: \n{st.session_state.statement_text}")
     st.write("") # Create more space 
     st.write("") # Create more space   
