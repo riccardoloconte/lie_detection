@@ -112,9 +112,9 @@ def display_truthful_deceptive_labels():
     space = st.columns(1)
     col1, col2, col3 = st.columns([1, 6, 1])
     with col1:
-        st.markdown("<p style='color: grey; font-size: 1.2em;'><strong>Deceptive</strong></p>", unsafe_allow_html=True)
+        st.markdown("<p style='color: grey; font-size: 1.1em;'><strong>Deceptive</strong></p>", unsafe_allow_html=True)
     with col3:
-        st.markdown("<p style='text-align: right; color: grey; font-size: 1.2em;'><strong>Truthful</strong></p>", unsafe_allow_html=True)
+        st.markdown("<p style='text-align: right; color: grey; font-size: 1.1em;'><strong>Truthful</strong></p>", unsafe_allow_html=True)
 
 ####################################################################################################################
 
