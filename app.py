@@ -19,7 +19,7 @@ participant_data = conn.read(worksheet="Sheet2", usecols=list(range(12)), ttl=5)
 # Load the dataset (assuming it's in the same directory)
 @st.cache_data(ttl=1800)  # Cache the data for 60 seconds
 def load_statements():
-    return pd.read_csv("Embedded_lies_subset.csv", sep=",")
+    return pd.read_csv("Embedded_lies_subset.csv", sep=";")
 
 # Define progress bar
 total_steps = 22
