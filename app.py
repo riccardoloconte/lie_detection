@@ -15,10 +15,7 @@ from streamlit_gsheets import GSheetsConnection
 conn = st.connection("gsheets", type=GSheetsConnection)  
 experiment_data = conn.read(worksheet="Sheet1", usecols=list(range(13)), ttl=5)
 participant_data = conn.read(worksheet="Sheet2", usecols=list(range(12)), ttl=5)
-
-if 'experiment_responses' not in st.session_state:
-        st.session_state.experiment_responses = pd.DataFrame()
-
+        
 # Load the dataset (assuming it's in the same directory)
 @st.cache_data(ttl=1800)  # Cache the data for 60 seconds
 def load_statements():
@@ -61,6 +58,15 @@ if 'prolific_id' not in st.session_state:
 # Initialize participant ID if it doesn't exist
 if 'participant_id' not in st.session_state:
     st.session_state.participant_id = str(uuid.uuid4())
+
+# Initialize accuracy condition 
+if 'accuracy_condition' not in st.session_state:
+        random.seed(st.session_state.participant_id)  # Set a different seed each time
+        conditions = random.choice(["accuracy_low", "accuracy_high"])
+
+# Initialize experiment responses if it doesn't exist
+if 'experiment_responses' not in st.session_state:
+        st.session_state.experiment_responses = pd.DataFrame()
 
 # For example page
 # Initialize session state to track the sub-page of the example
@@ -105,9 +111,9 @@ def display_truthful_deceptive_labels():
     space = st.columns(1)
     col1, col2, col3 = st.columns([1, 6, 1])
     with col1:
-        st.markdown("<p style='color: grey; font-size: 0.9em;'><strong>Deceptive</strong></p>", unsafe_allow_html=True)
+        st.markdown("<p style='color: grey; font-size: 1.2em;'><strong>Deceptive</strong></p>", unsafe_allow_html=True)
     with col3:
-        st.markdown("<p style='text-align: right; color: grey; font-size: 0.9em;'><strong>Truthful</strong></p>", unsafe_allow_html=True)
+        st.markdown("<p style='text-align: right; color: grey; font-size: 1.2em;'><strong>Truthful</strong></p>", unsafe_allow_html=True)
 
 ####################################################################################################################
 
@@ -205,14 +211,24 @@ def example_page():
     
     # Sub-page 2: AI Slider and Explanation
     elif st.session_state.example_sub_page == 2:
-        st.write(":robot_face: **You will be provided with an algorithmic prediction for that statement.** :arrow_down:")
+        # Display condition-based AI slider message
+        if st.session_state.accuracy_condition == 'accuracy_low':
+                st.markdown(":robot_face: **An AI-based lie detector with :blue-background[54% accuracy] will provide you with a prediction for that statement** :arrow_down:")
+        else:
+                st.markdown(":robot_face: **An AI-based lie detector with :blue-background[89% accuracy] will provide you with a prediction for that statement** :arrow_down:")
         
         st.slider("AI Judgment:", min_value=-50, max_value=+50, value=35, step=10, disabled=True) 
         st.columns(1)
         display_confidence_labels(labels, style) # Display confidence labels 
         display_truthful_deceptive_labels()  # Display true-false labels 
-        
-        st.write("""**Explanations:** This slider shows you that the more the judgment is close to **+50**, the more the AI lie-detector is **confident** that the statement is **truthful**.
+
+        # Display condition-based AI slider message
+        if st.session_state.accuracy_condition == 'accuracy_low':
+                st.markdown("**Explanations:** :blue-background[54% accurate] means that, in general, the AI-based lie detector can correctly identify if a statement is truthful :white_check_mark: or a lie :lying_face: 54% of the times")
+        else:
+                st.markdown("**Explanations:** :blue-background[89% accurate] means that, in general, the AI-based lie detector can correctly identify if a statement is truthful :white_check_mark: or a lie :lying_face: 89% of the times")
+                
+        st.write(""" This slider shows you that the more the judgment is close to **+50**, the more the AI lie-detector is **confident** that the statement is **truthful**.
             The more the judgment is close to **-50**, the more the AI lie-detector is **confident** that the statement is **deceptive**.
             When the slider is close to zero it means that the AI lie-detector doesn't really know whether the statement is truthful or deceptive.""")
 
@@ -284,10 +300,10 @@ def experiment_page():
    # Initialize session state attributes if not already initialized
     if 'current_index' not in st.session_state:
         st.session_state.current_index = 0
-    if 'accuracy_condition' not in st.session_state:
-        random.seed(st.session_state.participant_id)  # Set a different seed each time
-        conditions = random.choice(["accuracy_low", "accuracy_high"])
-        st.session_state.accuracy_condition = conditions
+   # if 'accuracy_condition' not in st.session_state:
+   #     random.seed(st.session_state.participant_id)  # Set a different seed each time
+   #     conditions = random.choice(["accuracy_low", "accuracy_high"])
+   #     st.session_state.accuracy_condition = conditions
     if 'start_time' not in st.session_state:
         st.session_state.start_time = time.time()
     if f'start_time_{st.session_state.current_index}' not in st.session_state:
@@ -367,9 +383,9 @@ def experiment_page():
 
     # Display condition-based AI slider message
     if st.session_state.accuracy_condition == 'accuracy_low':
-        st.write(":robot_face: **An AI-based lie detector with 54% accuracy has provided the following judgment for this statement** :arrow_down:")
+        st.markdown(":robot_face: **An AI-based lie detector with :blue-background[54% accuracy] has provided the following judgment for this statement** :arrow_down:")
     else:
-        st.write(":robot_face: **An AI-based lie detector with 89% accuracy has provided the following judgment for this statement** :arrow_down:")
+        st.markdown(":robot_face: **An AI-based lie detector with :blue-background[89% accuracy] has provided the following judgment for this statement** :arrow_down:")
 
     if st.session_state.statement_condition == 'attention_check':
         ai_judgment = int(statement_row['confidence'])  # Set AI judgment to the specified value for attention checks
@@ -382,6 +398,7 @@ def experiment_page():
     display_truthful_deceptive_labels() # Display true-false labels 
 
     # Participant's interactive slider
+    st.write("") # Create more space 
     st.write(":sleuth_or_spy: **Please rate the statement** :arrow_down:")
 
     def slider_callback():
