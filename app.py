@@ -19,7 +19,7 @@ participant_data = conn.read(worksheet="Sheet2", usecols=list(range(12)), ttl=5)
 # Load the dataset (assuming it's in the same directory)
 @st.cache_data(ttl=1800)  # Cache the data for 60 seconds
 def load_statements():
-    return pd.read_csv("hippocorpus_test_set.csv", sep=";")
+    return pd.read_csv("Embedded_lies_subset.csv", sep=",")
 
 # Define progress bar
 total_steps = 22
@@ -351,7 +351,9 @@ def experiment_page():
     statement_row = st.session_state.statements.iloc[st.session_state.current_index]
     
     # Store statement details in session state for consistent access
-    st.session_state.statement_id = statement_row['truth-dec_pairID']
+    st.session_state.statement_id = statement_row['author_id']
+    st.session_state.event = statement_row['event']    
+    st.session_state.context = statement_row['reason_for_lying']    
     st.session_state.statement_text = statement_row['text']
     st.session_state.statement_condition = statement_row['condition']
     st.session_state.statement_confidence_range = statement_row['confidence_range']
@@ -377,6 +379,8 @@ def experiment_page():
     
     # Display the statement
     st.write("Please read the following statement carefully:")
+    st.write(f"**Topic:** {st.session_state.event}")
+    st.write(f"**Context:** The author of the statement might have lied {st.session_state.context}")    
     st.write(f"**Statement {statement_number}**: \n{st.session_state.statement_text}")
     st.write("") # Create more space 
     st.write("") # Create more space   
