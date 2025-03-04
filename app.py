@@ -229,7 +229,7 @@ def example_page():
         else:
                 st.markdown("**Explanations:** :blue-background[89% accurate] means that, in general, the AI-based lie detector can correctly identify if a statement is truthful :white_check_mark: or a lie :lying_face: 89% of the times")
                 
-        st.write(""" This slider shows you that the more the judgment is close to **+50**, the more the AI lie-detector is **confident** that the statement is **truthful**.
+        st.write(""" Additionally, the slider shows you that the more the judgment is close to **+50**, the more the AI lie-detector is **confident** that the statement is **truthful**.
             The more the judgment is close to **-50**, the more the AI lie-detector is **confident** that the statement is **deceptive**.
             When the slider is close to zero it means that the AI lie-detector doesn't really know whether the statement is truthful or deceptive.""")
 
