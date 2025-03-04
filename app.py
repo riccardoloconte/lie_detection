@@ -63,6 +63,7 @@ if 'participant_id' not in st.session_state:
 if 'accuracy_condition' not in st.session_state:
         random.seed(st.session_state.participant_id)  # Set a different seed each time
         conditions = random.choice(["accuracy_low", "accuracy_high"])
+        st.session_state.accuracy_condition = conditions
 
 # Initialize experiment responses if it doesn't exist
 if 'experiment_responses' not in st.session_state:
