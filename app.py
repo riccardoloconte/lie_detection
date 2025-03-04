@@ -123,7 +123,7 @@ def welcome_page():
     show_progress_bar()
 
     st.title("Welcome to the _'UNMASK THE LIES'_ study")
-    st.write("""In this study, we are investigating how people make decisions when evaluating the veracity of statements. 
+    st.write("""In this study, we are investigating how people make decisions when evaluating the truthfulness of statements. 
              We will now give you detailed instructions. **Please read them carefully.**
              \nOnce you complete the experiment, you will be redirected to Prolific.""")
     
