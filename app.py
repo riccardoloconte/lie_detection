@@ -225,9 +225,9 @@ def example_page():
 
         # Display condition-based AI slider message
         if st.session_state.accuracy_condition == 'accuracy_low':
-                st.markdown("**Explanations:** :blue-background[54% accurate] means that, in general, the AI-based lie detector can correctly identify if a statement is truthful or a lie 54% of the times")
+                st.markdown("**Explanations:** :blue-background[54% accurate] means that, on average, the AI-based lie detector can correctly identify if a statement is truthful or a lie 54% of the times")
         else:
-                st.markdown("**Explanations:** :blue-background[89% accurate] means that, in general, the AI-based lie detector can correctly identify if a statement is truthful or a lie 89% of the times")
+                st.markdown("**Explanations:** :blue-background[89% accurate] means that, on average, the AI-based lie detector can correctly identify if a statement is truthful or a lie 89% of the times")
                 
         st.write(""" Additionally, the slider shows you the model's confidence at the statement level. The more the judgment is close to **+50**, the more the AI lie-detector is **confident** that the statement is **truthful**.
             The more the judgment is close to **-50**, the more the AI lie-detector is **confident** that the statement is **deceptive**.
