@@ -14,7 +14,7 @@ from streamlit_gsheets import GSheetsConnection
 # Create a connection object
 conn = st.connection("gsheets", type=GSheetsConnection)  
 experiment_data = conn.read(worksheet="Sheet1", usecols=list(range(13)), ttl=5)
-participant_data = conn.read(worksheet="Sheet2", usecols=list(range(12)), ttl=5)
+participants_data = conn.read(worksheet="Sheet2", usecols=list(range(12)), ttl=5)
         
 # Load the dataset (assuming it's in the same directory)
 @st.cache_data(ttl=1800)  # Cache the data for 60 seconds
@@ -463,9 +463,21 @@ def experiment_page():
             ]
         )
 
+        
+
         # Append response data to experiment_data in session state
         st.session_state.experiment_responses = pd.concat([st.session_state.experiment_responses, response_data], ignore_index=True)
+        
+        # Read the existing CSV file
+        try:
+            existing_data = pd.read_csv("experiment_data.csv", sep=";")
+        except FileNotFoundError:
+            existing_data = pd.DataFrame()
+        
         combined_data = pd.concat([experiment_data, st.session_state.experiment_responses], ignore_index=True)
+        
+        # Write the updated data back to the CSV file
+        combined_data.to_csv("experiment_data.csv", index=False)
 
         st.session_state.submitted = True 
         st.success("Your judgment has been recorded!")
@@ -619,10 +631,20 @@ def feedback_page():
                         
                 # Retrieve response_data and questions_data from session state
                 questions_data = st.session_state.questions_data
-        
+
+                # Read the existing CSV file
+                try:
+                    participants_data = pd.read_csv("participants_data.csv", sep=";")
+                except FileNotFoundError:
+                    participants_data = pd.DataFrame()
+
                 # Concatenate all data into a single list
                 combined_data = pd.concat([questions_data,feedback_data], axis=1)
-                updated_df = pd.concat([participant_data, combined_data], ignore_index=True)
+                updated_df = pd.concat([participants_data, combined_data], ignore_index=True)
+
+                # Write the updated data back to the CSV file
+                updated_df.to_csv("participants_data.csv", index=False)
+                
                 conn.update(worksheet="Sheet2", data=updated_df)
         
                 st.write("Thank you for your feedback.")
