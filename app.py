@@ -487,7 +487,8 @@ def experiment_page():
             st.rerun()  
         else:
             #conn.update(worksheet="Sheet1", data=combined_data)
-            combined_data.to_csv("experiment_data.csv", index=False) # Write the updated data back to the CSV file 
+            with open('experiment_data.csv',  'w', encoding = 'utf=8') as file:
+                combined_data.to_csv(file, index=False) 
             st.session_state.page = 'final_questions'
             st.rerun()
 
@@ -638,8 +639,9 @@ def feedback_page():
                 updated_df = pd.concat([participants_data, combined_data], ignore_index=True)
 
                 # Write the updated data back to the CSV file
-                updated_df.to_csv("participants_data.csv", index=False)
-                
+                #updated_df.to_csv("participants_data.csv", index=False)
+                with open("participants_data.csv",  'w', encoding = 'utf=8') as file:
+                     updated_df.to_csv(file, index=False) 
                 #conn.update(worksheet="Sheet2", data=updated_df)
         
                 st.write("Thank you for your feedback.")
