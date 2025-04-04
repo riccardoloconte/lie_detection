@@ -6,15 +6,15 @@ import pandas as pd
 import numpy as np
 import random
 import uuid 
-import streamlit_gsheets
-from google.oauth2.service_account import Credentials
+#import streamlit_gsheets
+#from google.oauth2.service_account import Credentials
 from streamlit.components.v1 import html
-from streamlit_gsheets import GSheetsConnection
+#from streamlit_gsheets import GSheetsConnection
 
 # Create a connection object
-conn = st.connection("gsheets", type=GSheetsConnection)  
-experiment_data = conn.read(worksheet="Sheet1", usecols=list(range(13)), ttl=5)
-participants_data = conn.read(worksheet="Sheet2", usecols=list(range(12)), ttl=5)
+#conn = st.connection("gsheets", type=GSheetsConnection)  
+#experiment_data = conn.read(worksheet="Sheet1", usecols=list(range(13)), ttl=5)
+#participants_data = conn.read(worksheet="Sheet2", usecols=list(range(12)), ttl=5)
         
 # Load the dataset (assuming it's in the same directory)
 @st.cache_data(ttl=1800)  # Cache the data for 60 seconds
@@ -486,7 +486,7 @@ def experiment_page():
             st.session_state.slider_moved = False  # Reset slider moved status for the next statement
             st.rerun()  
         else:
-            conn.update(worksheet="Sheet1", data=combined_data)
+            #conn.update(worksheet="Sheet1", data=combined_data)
             #with open('experiment_data.csv',  'w', encoding = 'utf=8') as file:
             #    combined_data.to_csv(file, index=False) 
             st.session_state.page = 'final_questions'
@@ -642,7 +642,7 @@ def feedback_page():
                 #updated_df.to_csv("participants_data.csv", index=False)
                 #with open("participants_data.csv",  'w', encoding = 'utf=8') as file:
                 #     updated_df.to_csv(file, index=False) 
-                conn.update(worksheet="Sheet2", data=updated_df)
+                #conn.update(worksheet="Sheet2", data=updated_df)
         
                 st.write("Thank you for your feedback.")
                 st.session_state.page = 'end'
